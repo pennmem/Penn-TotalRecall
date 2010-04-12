@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# Script to launch Penn TotalRecall
+#
+# The basic trick is to change $LD_LIBRARY_PATH to make sure our native libs are found.
+#
+# Author: Yuvi Masory
+#
+
+PTR_LIBS="/opt/penntotalrecall/lib/"
+
+LD_LIBRARY_PATH="$PTR_LIBS:$LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+java -jar /opt/penntotalrecall/PennTotalRecall.jar "$@"

@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- 
+	Apache Ant build file for PennTotalRecall
+	
+	
+    Compilation:
+	    Java - Any system with JDK 6+ should be able to create the runnable jar file (package_jar) which makes the program GUI sans audio system.
+               If you get compiler errors about the Desktop class it's because Ant is trying to compile against the Java 5 libraries.
+        Native - If you have a supported C-compiler installed (Linux: gcc/make and libc6 for 32 and 64, Mac: standard XCode tools, Windows: Visual C++)
+                 your can also compile the audio system (compile_native) and move those libraries to your appropriate system path (install_native).
+                 That is all you need to run the full program.
+		         Launch the program with java -jar dist/PennTotalRecall.jar
+	
+		
+    Packaging:
+        Source -  package_src
+		Windows - package_win_exe (requires Launch4j installed) then package_win_installer (requires NSIS installed)
+		Mac - package_mac_app followed by package_mac_dmg (requires standard XCode dev tools)
+		Linux - package_linux_deb
+
+
+    Release: (all require Ant SCP and ${release_host} in $HOME/.ssh/known_hosts, and an account on ${release_host} with permissions to target directory):
+        Source - release_src
+        Windows - release_win_installer
+        Mac - release_mac_dmg
+        Linux - release_linux_deb
+
+		
+    NOTE: Any locations where this script expects files should be declared as properties in ant.properties file.
+          The only exception is the top-level dirs in the project which are declared as name/location properties so Ant
+          can figure out their absolute paths.
+	NOTE: All useful output is placed in dist. Intermediate files are placed in tmp, except Java class files which go in classes.
+	NOTE: Cross-compiling/packaging between operating systems is not supported. E.g., to build for Windows you must be on Windows.
+	
+		
+	Author: Yuvi Masory, Apurva Jatakia
+
+
+    This build file has been tested on:
+        Ant 1.7.1
+        Mac OSX 10.6 (64 bit) (see Makefile for compiler version)
+        Ubuntu 10.11 (32/64 bit) (see Makefile for compiler version)
+        Windows 7 (64 bit) (Visual C++ 2008)
+-->
+
+
+<project default="package_jar" name="Penn TotalRecall -- build Java, native, and create installers, and release" basedir=".">
+	
+	<!-- Create aliases for absolute paths of project directories. -->
+	<property name="dev" location="dev"/>
+	<property name="deploy" location="deploy"/>
+	<property name="lib" location="lib"/>
+	<property name="native" location="native"/>
+	<property name="resources" location="resources"/>
+	<property name="src" location="src"/>
+	<property name="resources" location="resources"/>
+	<property name="program_files" location="C:/Program Files (x86)"/>
+
+	<!-- Create aliases for absolute paths of directories created by ant. -->	
+	<property name="classes" location="classes"/>
+	<property name="dist" location="dist"/>
+    <property name="tmp" location="tmp"/>
+
+    <!-- Location of ant custom task jars -->
+    <path id="buildtool_jars">
+      <fileset dir="${dev}/buildtools/classpath/">
+        <include name="**/*.jar"/>
+      </fileset>
+    </path>
+
+
+
+
+
+    <!-- PRELIMINARIES -->
+
+    <!-- Create folders, read in properties, etc. etc. -->
+    <target name="-init" depends="-javaCheck">
+      <property file="ant.properties" />
+
+      <echo message="CHECKING JAVA VERSION"/>
+      <fail unless="isJava6" message="JAVA 6 REQUIRED -- SET JAVA_HOME ENV VARIABLE TO A JAVA 6 INSTALLATION"/>
+
+      <echo message="SETTING TIME STAMP"/>
+  	  <tstamp/>
+
+      <echo message="CREATING DIRECTORIES USED BY OTHER TARGETS"/>
+	  <mkdir dir="${classes}"/>
+	  <mkdir dir="${dist}"/>
+	  <mkdir dir="${tmp}"/>
+    </target>
+
+     <!-- Delete the ${classes}, ${dist}, and ${tmp} directory trees. -->
+  	<target name="clean" description="remove everything created by ant">
+        <echo message="REMOVING EVERYTHING CREATED BY ANT"/>
+   		<delete dir="${classes}" quiet="true" failonerror="false"/>
+    	<delete dir="${dist}" quiet="true" failonerror="false"/>
+    	<delete dir="${tmp}" quiet="true" failonerror="false"/>
+  	</target>
+
+
+	
+
+
+
+
+
+    <!-- SOURCE RELEASE -->
+
+    <!-- Create jar with all project code in it. -->  	
+	<target name="package_src" depends="-init" description="create a zip file containing all project files, appropriate for source release">
+        <echo message="CREATING ZIP WITH ENTIRE PROJECT IN IT"/>
+        <!-- necessary to avoid the problem that a zip file can't contain itself -->
+        <delete file="${src_zip_target}" quiet="true" failonerror="false"/>
+        <zip destfile="${src_zip_target}" basedir="."/>
+	</target>
+
+    <!-- Move source zip file to remote host for download by end users -->
+    <target name="release_src" depends="package_src" description="move source zip file to remote host for download -- requires Ant SCP and ${release_host} in $HOME/.ssh/known_hosts">
+        <antcall target="-scp">
+          <param name="file_to_move" value="${src_zip_target}"/>
+          <param name="dest_dir" value="${release_path}"/>
+        </antcall>
+    </target>
+
+	
+
+
+
+
+
+
+
+    <!-- JAVA PORTION -->
+
+    <!-- Compile Java source. -->
+	<target name="compile_java" depends="-init" description="compile the Java component of the program">
+        <echo message="COMPILING JAVA SOURCE CODE"/>
+	    <javac target="1.5" srcdir="${src}" destdir="${classes}">
+            <classpath>
+                <fileset dir="${lib}">
+                    <include name="*.jar" />
+                </fileset>
+            </classpath>
+		</javac>
+	</target>
+	
+	    	
+	<!-- Create runnable jar file (will lack native audio system). -->  	
+	<target name="package_jar" depends="compile_java" description="create a runnable jar of the Java component of the program">
+        <echo message="FLATTENING JAR DEPENDENCIES"/>
+        <property name="flat_jars" location="${tmp}/flattened_dependencies"/>
+   		<delete dir="${flat_jars}" quiet="true" failonerror="false"/>
+        <mkdir dir="${flat_jars}"/>
+
+        <unzip dest="${flat_jars}">
+            <fileset dir="${lib}">
+                <include name="**/*.jar"/>
+            </fileset>
+        </unzip>
+
+        <echo message="CREATING RUNNABLE JAR OF JAVA PORTION OF PROGRAM"/>
+	    <jar destfile="${run_jar_target}" filesetmanifest="skip">
+	        <manifest>
+	            <attribute name="Main-Class" value="${main_class}"/>
+	            <attribute name="Class-Path" value="."/>
+                <attribute name="Built-By" value="${user.name}"/>
+                <attribute name="Implementation-Vendor" value="${org_name}"/>
+                <attribute name="Implementation-Title" value="${program_proper_name}"/>
+	        </manifest>
+            <fileset dir="${flat_jars}"/>
+	        <fileset dir="${classes}"/>
+	        <fileset dir="${resources}"/>
+	    </jar>
+   		<delete dir="${flat_jars}" quiet="true" failonerror="false"/>
+	</target>
+	
+
+
+
+
+
+
+
+
+    <!-- NATIVE PORTION -->
+
+	<!-- Compile native audio system using gcc or MSVC. -->
+	<target name="compile_native" depends="-init" description="compile native audio system -- requires gcc/make or msvc">
+        <echo message="CALLING NATIVE make OR vcbuild TO COMPILE AUDIO SYSTEM"/>
+        <exec dir="${fmod_posix_build}" executable="make" os="Linux | Mac OS X" failonerror="true"/>
+        <exec executable="vcbuild" osfamily="windows" failonerror="true">	
+        	<arg value="${fmod_windows_buildfile}"/>
+            <arg value="$all"/>
+        </exec>
+		
+		<echo message="CLEANING UP INTERMEDIATE vcbuild FILES" />
+		<delete dir="${tmp}/vc_libbuild_tmp" failonerror="false"/>
+		<delete dir="${tmp}/vc_libbuild64_tmp" failonerror="false"/>
+		<delete file="${tmp}/penntotalrecall.exp" failonerror="false"/>
+		<delete file="${tmp}/penntotalrecall.lib" failonerror="false"/>
+		<delete file="${tmp}/penntotalrecall.pdb" failonerror="false"/>
+		<delete file="${tmp}/penntotalrecall64.exp" failonerror="false"/>
+		<delete file="${tmp}/penntotalrecall64.lib" failonerror="false"/>
+		<delete file="${tmp}/penntotalrecall64.pdb" failonerror="false"/>
+	</target>
+
+	<!-- Move native libraries to system paths. -->
+	<target name="install_native" depends="compile_native" description="move native audio libraries into system library directory">
+        <echo message="CALLING NATIVE make install TO MOVE AUDIO LIBRARIES TO SYSTEM PATHS"/>
+        <exec dir="${fmod_posix_build}" executable="make" os="Linux || Mac OS X" failonerror="true">
+            <arg value="install"/>
+        </exec>
+	</target>
+
+
+
+
+
+
+
+
+
+
+
+    <!-- WINDOWS RELEASE -->
+
+	<!-- Make a Windows .exe wrapper using Launch4j. -->
+	<target name="package_win_exe" depends="package_jar" description="make a exe wrapper for the runnable jar file -- requires launch4j">
+		<echo message="UNZIPPING l4j.zip (WORKAROUND)"/>
+		<unzip src="${l4j_zip}" dest="${tmp}"/>
+		<property name="l4j_root" value="${tmp}/l4j"/>
+		<echo message="CREATING .exe WRAPPER USING Launch4j"/>
+	    <taskdef name="launch4j"
+	             classname="net.sf.launch4j.ant.Launch4jTask"
+	             classpath="${l4j_root}/launch4j.jar:${l4j_root}/lib/xstream.jar"/>
+		<launch4j configFile="${deploy}/windows/launch4j_config.xml"/>
+		<echo message="DELETING UNZIPPED l4j.zip (DOES NOT FULLY WORK)"/>
+		<delete dir="${l4j_root}" failonerror="false"/>
+	</target>
+
+	<!-- Make a Windows installer using NSIS. -->
+	<target name="package_win_installer" depends="package_win_exe, compile_native" description="make a Windows installer for the exe wrapper -- requires NSIS">
+	    <taskdef name="nsis" 
+	    	classname="net.sf.nsisant.Task"
+	    	classpathref="buildtool_jars"/>
+		<nsis script="${nsis_script}" path="${nsis_root}"/>
+	</target>
+
+    <!-- Move Windows installer to remote host for download by end users -->
+    <target name="release_win_installer" depends="package_win_installer" description="move Windows installer file to remote host for download -- requires Ant SCP and ${release_host} in $HOME/.ssh/known_hosts">
+        <antcall target="-scp">
+          <param name="file_to_move" value="${win_installer}"/>
+          <param name="dest_dir" value="${release_path}"/>
+        </antcall>
+    </target>
+
+
+
+
+
+
+
+
+
+
+    <!-- LINUX RELEASE -->
+
+	<!-- Make a Debian installer. -->
+	<target name="package_linux_deb" depends="package_jar, compile_native" description="make Debian deb package for program">
+        <taskdef resource="ant_deb_task.properties" classpathref="buildtool_jars"/>
+        <property name="debtmp" value="${tmp}/deb"/>
+		<mkdir dir="${debtmp}"/>
+		<desktopentry toFile="${debtmp}/${program_extensionless_filename}.desktop" name="${program_proper_name}" exec="/usr/bin/${unix_name}" icon="/usr/share/${unix_name}/headphones16.png" categories="Utility;Java"/>
+
+		<copy file="${run_jar_target}" tofile="${debtmp}/${program_extensionless_filename}.jar"/>
+		<copy file="${headphones16}" tofile="${debtmp}/headphones16.png"/>
+		<copy file="${linux_fmod_32_dir}/${linux_fmod_32_name}" todir="${debtmp}"/>
+		<copy file="${linux_fmod_64_dir}/${linux_fmod_64_name}" todir="${debtmp}"/>
+		<copy file="${tmp}/${linux_libptr_32_name}" todir="${debtmp}"/>
+		<copy file="${tmp}/${linux_libptr_64_name}" todir="${debtmp}"/>
+
+		<deb todir="${dist}" package="${unix_name}" section="sound" depends="${debian_depends}" homepage="${homepage}">
+			<version upstream="${version}" />
+			<maintainer email="${maintainer_email}" name="${maintainer_name}" />
+			<description synopsis="an easy-to-use tool for quickly annotating audio files"/>
+			<tarfileset dir="${debtmp}" prefix="opt/${unix_name}">
+				<include name="${program_extensionless_filename}.jar" />
+				<include name="headphones16.png"/>
+			</tarfileset>
+			<tarfileset file="${linux_start_script}" prefix="usr/bin" filemode="755" />
+			<tarfileset dir="${debtmp}" prefix="opt/${unix_name}/lib">
+				<include name="${linux_fmod_32_name}"/>
+				<include name="${linux_fmod_64_name}"/>
+                <include name="${linux_libptr_32_name}"/>
+                <include name="${linux_libptr_64_name}"/>
+			</tarfileset>
+			<tarfileset file="${headphones16}" prefix="/usr/share/${unix_name}"/>
+			<tarfileset file="${debtmp}/${program_extensionless_filename}.desktop" prefix="usr/share/applications" />
+		</deb>
+		<delete dir="${debtmp}" failonerror="false"/>
+	</target>
+
+    <!-- Move Linux debian package to remote host for download by end users -->
+    <target name="release_linux_deb" depends="package_linux_deb" description="move Linux deb to remote host for download -- requires Ant SCP and ${release_host} in $HOME/.ssh/known_hosts">
+        <antcall target="-scp">
+          <param name="file_to_move" value="${debian_target}"/>
+          <param name="dest_dir" value="${release_path}"/>
+        </antcall>
+    </target>
+
+
+
+
+
+
+
+
+    <!-- MAC RELEASE -->
+
+	<!-- Bundle jar into .app. -->
+	<target name="package_mac_app" depends="package_jar, compile_native" description="bundle the runnable jar into a Mac Application">
+        <taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" classpathref="buildtool_jars"/>
+        <echo message="CREATING MAC .app EXECUTABLE"/>
+        <jarbundler dir="${dist}"
+          name="${program_extensionless_filename}"
+          mainclass="${main_class}"
+          icon="${icns_icon}"
+          jvmversion="${min_jre}+"
+          infostring="${program_proper_name}"
+          shortname="${program_short_name}"
+          bundleid="${unique_identifier}"
+          jar="${run_jar_target}"
+          workingdirectory="$JAVAROOT">
+          <javafilelist dir="${tmp}" files="${mac_ptr_lib_name}"/>
+          <javafilelist dir="${native}/fmod/lib/osx/" files="${mac_fmod_lib_name}"/>
+        </jarbundler>
+	</target>
+
+	<!-- Make a Mac dmg installer. -->
+    <!-- The script was adpated from http://www.rkuntz.org/pmwiki.php?n=Code.AntDiskImage. Consult that guide for instructions on making a 
+         new .DS_Store if you want to change the appearance of the mounted DMG
+         BE WARNED: if you decide to make a new .DS_Store you need to make it on the oldest OS supported, they are NOT forward-compatible -->
+	<target name="package_mac_dmg" depends="package_mac_app" description="make a Mac dmg installer for the .app file -- requires XCode dev tools">
+        <property name="mount_dir" value="${tmp}/dmg_dir"/>
+        <property name="tmp_dmg" value="${tmp}/tmp.dmg"/>
+        <property name="program_extensionless_filename" value="${program_extensionless_filename}"/>
+
+        <!-- Delete files from last run -->
+        <delete file="${tmp_dmg}" quiet="yes" failonerror="false"/>
+        <delete file="${mount_dir}" quiet="yes" failonerror="false"/>
+
+        <mkdir dir="${mount_dir}"/>        
+
+        <echo message="CREATING TEMPORARY DMG"/>
+        <!-- Create a temporary Disk Image -->
+        <exec executable="/usr/bin/hdiutil" os="Mac OS X" failonerror="true">
+          <arg value="create"/>
+          <arg value="-srcfolder"/>
+          <arg value="${dist}/${program_extensionless_filename}.app"/>
+          <arg value="-volname"/>
+          <arg value="${program_extensionless_filename}"/>
+          <arg value="-ov"/>
+          <arg value="${tmp_dmg}"/>
+          <arg value="-format"/>
+          <arg value="UDRW"/>
+        </exec>
+
+        <!-- Attach the temporary image -->
+        <echo message="MOUNTING DMG"/>
+        <exec executable="/usr/bin/hdiutil" os="Mac OS X" failonerror="true">
+          <arg value="attach"/>
+          <arg value="${tmp_dmg}"/>
+          <arg value="-mountroot"/>
+          <arg value="${mount_dir}"/>
+        </exec>
+
+        <echo message="ADDING FILES"/>
+        <!-- Copy the background, the volume icon and DS_Store files -->
+        <mkdir dir="${mount_dir}/${program_extensionless_filename}/.background"/>
+        <copy file="${dmg_background}" tofile="${mount_dir}/${program_extensionless_filename}/.background/background.png" overwrite="true"/>
+        <copy file="${mount_icon}" tofile="${mount_dir}/${program_extensionless_filename}/.VolumeIcon.icns" overwrite="true"/>
+        <copy file="${dsstore}" tofile="${mount_dir}/${program_extensionless_filename}/.DS_Store" overwrite="true"/>
+        <mkdir dir="${mount_dir}/${program_extensionless_filename}/Sample Files"/>
+        <copy file="${sample_wav}" todir="${mount_dir}/${program_extensionless_filename}/Sample Files"/>
+        <copy file="${sample_lst}" todir="${mount_dir}/${program_extensionless_filename}/Sample Files"/>
+        <copy file="${sample_wordpool}" todir="${mount_dir}/${program_extensionless_filename}/Sample Files"/>
+
+        <!-- Indicate that we want a custom icon --> 
+         <exec executable="/Developer/Tools/SetFile" os="Mac OS X">
+          <arg value="-a"/>
+          <arg value="C"/>
+          <arg value="${mount_dir}/${program_extensionless_filename}"/>
+        </exec>
+
+        <!-- Add a symbolic link to the Applications directory -->
+        <symlink link="${mount_dir}/${program_extensionless_filename}" resource="/Applications"/>
+
+        <echo message="UN-MOUNTING DMG"/>
+        <!-- Detach the temporary image -->
+         <exec executable="/usr/bin/hdiutil" os="Mac OS X" failonerror="true">
+           <arg value="detach"/>
+          <arg value="${mount_dir}/${program_extensionless_filename}"/>
+        </exec>
+
+        <!-- Compress it to a new image -->
+        <delete file="${dist}/${program_extensionless_filename}.dmg" quiet="yes" failonerror="false"/>
+        <echo message="COMPRESSING DMG"/>
+         <exec executable="/usr/bin/hdiutil" os="Mac OS X" failonerror="true">
+          <arg value="convert"/>
+          <arg value="${tmp_dmg}"/>
+          <arg value="-format"/>
+          <arg value="UDZO"/>
+          <arg value="-o"/>
+          <arg value="${dist}/${program_extensionless_filename}.dmg"/>
+        </exec>
+
+        <!-- Internet enable dmg for allegedly better installation experience.
+             Not currently in use because I think it actually degrades user experience.
+             Users are used to the behavior of the non-internet-enabled dmgs, and it only affects Safari anyway -->
+
+<!--         <echo message="INTERNET-ENABLING DMG"/> -->
+<!--         <exec executable="/usr/bin/hdiutil" os="Mac OS X" failonerror="true"> -->
+<!--           <arg value="internet-enable"/> -->
+<!--           <arg value="-yes"/> -->
+<!--           <arg value="${dist}/${program_extensionless_filename}.dmg"/> -->
+<!--         </exec> -->
+
+        <!-- Delete the temporary image -->
+        <echo message="DELETING INTERMEDIATE FILES: ${mount_dir}"/>
+        <delete file="${tmp_dmg}" quiet="yes" failonerror="false"/>
+        <delete dir="${mount_dir}" quiet="yes" failonerror="false"/>
+
+	</target>
+
+    <!-- Move Mac dmg to remote host for download by end users -->
+    <target name="release_mac_dmg" depends="package_mac_dmg" description="move Mac dmg to remote host for download -- requires Ant SCP (comes with XCode dev tools) and ${release_host} in $HOME/.ssh/known_hosts">
+        <antcall target="-scp">
+          <param name="file_to_move" value="${dmg_target}"/>
+          <param name="dest_dir" value="${release_path}"/>
+        </antcall>
+    </target>
+
+
+
+
+
+
+
+
+
+    <!-- INTERNAL FUNCTIONS -->
+    
+    <!-- General function to scp from provided file to target directory on ${release_host} -->
+    <target name="-scp">
+        <input message="${release_host} Username:" addproperty="release_host_username"/>
+        <input message="Password:" addproperty="release_host_password">
+          <handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
+        </input>
+        <fail unless="file_to_move" message="file_to_move has not been set so I don't know which file to scp. This is an internal error in the ant build file."/>
+        <fail unless="dest_dir" message="dest_dir has not been set so I don't know which path to send ${file_to_move} to. This is an internal error in the ant build file."/>
+        <echo message="SCP'ing ${file_to_move} FILE TO REMOTE HOST . . . BE PATIENT"/>
+        <scp file="${file_to_move}" todir="${release_host_username}:${release_host_password}@${release_host}:${dest_dir}"/>
+    </target>
+
+    <!-- Fails if Java 6 is not running (not this should really be future-proofed to Java 6 _or higher_ -->
+    <target name="-javaCheck">
+        <echo message="ant.java.version=${ant.java.version}" />
+        <condition property="isJava6">
+                <equals arg1="${ant.java.version}" arg2="1.6" />
+        </condition>
+    </target>
+
+</project>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" 
+	codebase="http://memory.psych.upenn.edu/files/software/TotalRecall/"
+	href="TRecallLaunch.jnlp">
+    <information>
+        <title>Total Recall</title>
+        <vendor>Computational Memory Lab</vendor>
+        <homepage>http://memory.psych.upenn.edu/TotalRecall</homepage>
+        <offline-allowed/> 
+   </information>
+   <security>
+ 	<all-permissions/>
+   </security>
+   <resources>
+        <!-- Application Resources -->
+        <j2se version="1.5+" java-vm-args="-Xmx256m"/>
+        <jar href="TotalRecall.jar"/>
+    </resources>
+    <application-desc name="Total Recall" main-class="control.Start"/>
+    <update check="background"/>
+</jnlp>

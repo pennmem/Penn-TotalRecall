@@ -1,0 +1,11 @@
+== Version 0.54 ==
+Windows version released
+
+
+
+== Version 0.53 ==
+Features:
+	Linux version released
+	replay command added (Command-R on Mac, Control-R on Windows/Linux)
+Bug Fixes:
+    eliminated NullPointerExceptions in focus traversal

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="resources"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/jna.jar"/>
+	<classpathentry kind="lib" path="lib/signalproc.jar"/>
+	<classpathentry kind="lib" path="test/lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="lib/JavaExtensionsPlusPlus.jar"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

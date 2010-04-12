@@ -1,0 +1,36 @@
+These are bugs that were turned up during the development of Penn TotalRecall
+-----------------------------------------------------------------------------
+
+LWJGL:
+1) WaveData class uses AudioInputStream.getFrameLength() instead of AudioInputStream.available()
+bug report: http://lwjgl.org/forum/index.php/topic,3210.0.html
+new version release notes: http://lwjgl.org/forum/index.php?topic=3212
+
+2) LWJGL OpenAL plays sounds off by a couple hundred milliseconds
+http://lwjgl.org/forum/index.php/topic,3219.0.html
+
+Oracle:
+1) Latency in event pipe when AbstractAction associated with JMenuItem
+http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6924234
+
+2) JMenuItems in GTK LAF have no borders
+http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6925412
+
+3) GTK LAF gives --> resize cursor over JSplitPane instead of <-->
+Bug apparently not accepted.
+
+IcedTea:
+3) PulseAudioSourceDataLine.isControlSupported(GAIN) returns true inappropriately
+http://icedtea.classpath.org/bugzilla/show_bug.cgi?id=438
+
+rkuntz.org:
+1) Contributed to AntDiskImage writeup
+http://www.rkuntz.org/pmwiki.php?n=Code.AntDiskImage
+
+ant-deb-task:
+1) Bug in ther Ant task's String processing required in-house patch
+http://code.google.com/p/ant-deb-task/issues/detail?id=46
+
+Unreported Bugs:
+- OpenJDK draws waveform image partially transparently
+- IcedTea: many incompatibilities between their implementation of Java Sound and Oracle's

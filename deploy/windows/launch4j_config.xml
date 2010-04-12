@@ -1,0 +1,26 @@
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>..\..\dist\PennTotalRecall.jar</jar>
+  <outfile>..\..\dist\PennTotalRecall.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir>lib</chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl>http://memory.psych.upenn.edu/TotalRecall</supportUrl>
+  <customProcName>false</customProcName>
+  <stayAlive>false</stayAlive>
+  <manifest></manifest>
+  <icon>headphones.ico</icon>
+  <singleInstance>
+    <mutexName>edu.upenn.psych.memory.totalrecall</mutexName>
+    <windowTitle></windowTitle>
+  </singleInstance>
+  <jre>
+    <path></path>
+    <minVersion>1.5.0</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+  </jre>
+</launch4jConfig>
