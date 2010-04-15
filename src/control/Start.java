@@ -52,7 +52,6 @@ import components.MySplitPane;
 
 //IMPROVE BUILD: msvc compiler warnings
 //IMPROVE BUILD: use path + chdir for all platforms
-//IMPROVE BUILD: release task only on nightly build machines, should set every last bit on the website
 //IMPROVE BUILD: add signing of .app to ant tasks
 //IMPROVE emacs keybindings pref should take effect immediately
 //IMPROVE examine bandpass lower cutoff for Mike
