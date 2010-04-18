@@ -35,6 +35,7 @@ import behaviors.multiact.SeekAction;
 import behaviors.multiact.ToggleAnnotationsAction;
 import behaviors.multiact.ZoomAction;
 import behaviors.singleact.AboutAction;
+import behaviors.singleact.CalibrateAction;
 import behaviors.singleact.CheckUpdatesAction;
 import behaviors.singleact.DoneAction;
 import behaviors.singleact.ExitAction;
@@ -140,6 +141,7 @@ public class MyMenu extends JMenuBar {
 			jmAudio.setMnemonic(KeyEvent.VK_C);
 		}
 		
+		JMenuItem jmiCalibrate = new JMenuItem(new CalibrateAction());
 		//see PlayPauseAction docs for explanation of this funniness
 		JMenuItem jmiPlayPause = new JMenuItem(
 				new PlayPauseAction(true));
@@ -185,6 +187,8 @@ public class MyMenu extends JMenuBar {
 		jmSeek.add(jmiLast200MoveRight);
 		jmSeek.add(jmiLast200MoveLeft);
 
+		jmAudio.add(jmiCalibrate);
+		jmAudio.addSeparator();
 		jmAudio.add(jmiPlayPause);
 		jmAudio.add(jmiStop);
 		jmAudio.add(jmiReplay);
