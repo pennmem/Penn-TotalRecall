@@ -7,7 +7,8 @@ import components.CalibrationFrame;
 public class CalibrateAction extends IdentifiedSingleAction {
 
 	public void actionPerformed(ActionEvent e) {
-			CalibrationFrame.getInstance().setVisible(true);
+		CalibrationFrame frame = CalibrationFrame.getInstance();
+		frame.setVisible(true);		
 	}	
 	
 	@Override
