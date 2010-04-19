@@ -12,6 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
+import util.GUIUtils;
+
 public class CalibrationFrame extends JFrame {
 	
 	private static CalibrationFrame instance;
@@ -19,6 +21,7 @@ public class CalibrationFrame extends JFrame {
 	private CalibrationFrame() {
 		setTitle("Calibration");
 		setSize(300, 300);
+		setLocation(GUIUtils.chooseLocation(this));
 		
 		JPanel panel = new JPanel();
 		panel.setOpaque(true);
