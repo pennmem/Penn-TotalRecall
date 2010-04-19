@@ -9,8 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.JSlider;
 
 import util.GUIUtils;
 
@@ -20,7 +19,7 @@ public class CalibrationFrame extends JFrame {
 	
 	private CalibrationFrame() {
 		setTitle("Calibration");
-		setSize(300, 300);
+		setSize(600, 300);
 		setLocation(GUIUtils.chooseLocation(this));
 		
 		JPanel panel = new JPanel();
@@ -31,13 +30,14 @@ public class CalibrationFrame extends JFrame {
 
 		JLabel label = new JLabel("Instructions");
 		
-		JSpinner spinner = new JSpinner();
+		JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 50, 0);
 		panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-		SpinnerNumberModel model = new SpinnerNumberModel();
-		model.setStepSize(1);
-		model.setMinimum(0);
-		model.setMaximum(100);
-		spinner.setModel(model);
+		slider.setMinorTickSpacing(1);
+		slider.setMajorTickSpacing(10);
+		slider.setPaintTicks(true);
+		slider.setPaintLabels(true);
+		slider.setPaintTrack(true);
+		slider.setSnapToTicks(true);
 		
 		JButton jbOk = new JButton("OK");
 		JButton jbCancel = new JButton("Cancel");
@@ -48,7 +48,7 @@ public class CalibrationFrame extends JFrame {
 		
 		panel.add(label);		
 		panel.add(Box.createVerticalGlue());
-		panel.add(spinner);
+		panel.add(slider);
 		panel.add(buttonPanel);
 	}
 	
