@@ -20,7 +20,6 @@ import info.UserPrefs;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -40,6 +39,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
+
+import util.GUIUtils;
 
 import components.MyFrame;
 
@@ -180,7 +181,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
 	@Override
 	public void setVisible(boolean visible) {
 		if(visible == true) {
-			setLocation(chooseLocation());
+			setLocation(GUIUtils.chooseLocation(this));
 		}
 		super.setVisible(visible);
 	}
@@ -199,39 +200,6 @@ public class PreferencesFrame extends JFrame implements WindowListener {
 			}
 		}
 		return allPrefs;
-	}
-
-	/**
-	 * Does the dirty work of figuring out where the <code>PreferencesFrame</code> should appear on the screen.
-	 * Tries to find a location that would make the <code>PreferencesFrame</code> centered in MyFrame, the app's main window.
-	 * 
-	 * @return The recommended <code>Point</code> for the top left hand point of the <code>PreferencesFrame</code>
-	 */
-	private Point chooseLocation() {
-		final Point p = MyFrame.getInstance().getLocationOnScreen();
-		final int mfX = (int)p.getX();
-		final int mfY = (int)p.getY();
-		final int mfWidth = MyFrame.getInstance().getWidth();
-		final int mfHeight = MyFrame.getInstance().getHeight();
-		final int prefWidth = (int) getSize().getWidth();
-		final int prefHeight = (int) getSize().getHeight();
-
-		int prefX = 0;
-		int prefY = 0;
-
-		if(mfWidth < prefWidth) {
-			prefX = mfX;
-		}
-		else {
-			prefX = mfX + (mfWidth - prefWidth)/2;
-		}
-		if(mfHeight < prefHeight) {
-			prefY = mfY;
-		}
-		else {
-			prefY = mfY + (mfHeight - prefHeight)/2;
-		}
-		return new Point(prefX, prefY);
 	}
 
 	/**
