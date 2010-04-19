@@ -1,8 +1,12 @@
 package components;
 
+import info.Constants;
+
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -13,8 +17,14 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 
 import util.GUIUtils;
+import util.GiveMessage;
+import edu.upenn.psych.memory.nativestatelessplayer.NativeStatelessPlayer;
+import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
 
 public class CalibrationFrame extends JFrame {
+	
+	private PrecisionPlayer player;
+	private boolean audioError = false;
 	
 	private static CalibrationFrame instance;
 	
@@ -39,7 +49,16 @@ public class CalibrationFrame extends JFrame {
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-		JButton playButton = new JButton("Play");
+		JButton playButton = new JButton();
+		try {
+			player = new NativeStatelessPlayer();
+			player.open("beep.wav");
+		}
+		catch(Throwable t) {
+			audioError = true;
+			t.printStackTrace();
+		}
+		playButton.setAction(new PlaySampleAction());
 		buttonPanel.add(playButton);
 		
 		
@@ -78,5 +97,22 @@ public class CalibrationFrame extends JFrame {
 			instance = new CalibrationFrame();
 		}
 		return instance;
+	}
+	
+	private class PlaySampleAction extends AbstractAction {
+		
+		public PlaySampleAction() {
+			putValue(NAME, "Play");
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			if(audioError != true) {
+				player.playShortInterval(0, 44100);
+			}
+			else {
+				GiveMessage.errorMessage("Cannot load audio system.\nYou may need to reinstall " + Constants.programName + ".");
+				CalibrationFrame.this.toFront();
+			}
+		}
 	}
 }
