@@ -159,8 +159,6 @@ public class CalibrationFrame extends JFrame {
 		buff.append("<p>For example, if you hear nothing at all when the slider is on 5, but hear a tiny blip when the slider is on 6, choose 6.</p>");		
 		buff.append("<br>");
 		buff.append("<p>Make sure your volume is turned up so you don't miss quiet sounds.</p>");
-		buff.append("<br>");
-		buff.append("<p>Common values are 1 (Mac), 17 (Linux), 151 (Windows), but your system may be very different.</p>");
 		buff.append("</html>");
 		return buff.toString();
 	}
