@@ -119,7 +119,7 @@ public class CalibrationFrame extends JFrame {
 		
 		
 		JPanel sliderPanel = new JPanel();
-		slider = new JSlider(JSlider.HORIZONTAL, 0, 50, 0);
+		slider = new JSlider(JSlider.HORIZONTAL, 0, 200, 0);
 		panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 		slider.setMinorTickSpacing(1);
 		slider.setMajorTickSpacing(10);
