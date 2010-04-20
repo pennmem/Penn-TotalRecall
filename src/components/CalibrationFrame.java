@@ -52,7 +52,7 @@ public class CalibrationFrame extends JFrame {
 		JButton playButton = new JButton();
 		try {
 			player = new NativeStatelessPlayer();
-			player.open(this.getClass().getResource("/resources/beep.wav"));
+//			player.open(this.getClass().getResource("/resources/beep.wav"));
 		}
 		catch(Throwable t) {
 			audioError = true;
