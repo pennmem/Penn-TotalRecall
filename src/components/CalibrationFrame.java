@@ -5,6 +5,10 @@ import info.Constants;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -50,9 +54,58 @@ public class CalibrationFrame extends JFrame {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 		JButton playButton = new JButton();
+		
+		String tmpDirPath = System.getProperty("java.io.tmpdir");
+		String tmpFileName = Long.toString(System.nanoTime()) + "_penntotalrecall.wav";
+		File extractedBeep = new File(tmpDirPath, tmpFileName);
+		FileOutputStream out = null;
+		try {
+			out = new FileOutputStream(extractedBeep);
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+			notifyFailure();
+			return;
+		}
+		InputStream in = this.getClass().getResourceAsStream("/beep200-300ms.wav");
+		if(in == null) {
+			System.err.println("could not find resource");
+			notifyFailure();
+			return;
+		}
+		try {
+			byte[] buffer = new byte[4096];
+			int numRead = 0;
+			while((numRead = in.read(buffer)) != -1) {
+				out.write(buffer, 0, numRead);
+			}
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+			notifyFailure();
+			return;
+		}
+		finally {
+			if(out != null) {
+				try {
+					out.close();
+				}
+				catch(IOException e) {}
+			}
+			if(in != null) {
+				try {
+					in.close();
+				}
+				catch(IOException e) {}
+			}
+		}
+		
+		
+		System.out.println("extracting beep to: " + extractedBeep.getAbsolutePath());
+		
 		try {
 			player = new NativeStatelessPlayer();
-//			player.open(this.getClass().getResource("/resources/beep.wav"));
+			player.open(extractedBeep.getAbsolutePath());
 		}
 		catch(Throwable t) {
 			audioError = true;
@@ -82,6 +135,10 @@ public class CalibrationFrame extends JFrame {
 		panel.add(sliderPanel);
 	}
 	
+	private void notifyFailure() {
+		GiveMessage.errorMessage("Error initializing audio calibration system.");
+	}
+
 	private String getInstructions() {
 		StringBuffer buff = new StringBuffer();
 		buff.append("<html>");
