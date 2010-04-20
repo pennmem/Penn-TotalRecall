@@ -19,6 +19,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import control.CurAudio;
 
 import util.GUIUtils;
 import util.GiveMessage;
@@ -117,6 +121,14 @@ public class CalibrationFrame extends JFrame {
 		
 		JPanel sliderPanel = new JPanel();
 		slider = new JSlider(JSlider.HORIZONTAL, 0, 200, 0);
+		slider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				int curVal = slider.getValue();
+				if(curVal > 0) {
+					CurAudio.setOffset(curVal - 1);
+				}
+			}			
+		});
 		panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 		slider.setMinorTickSpacing(1);
 		slider.setMajorTickSpacing(10);
