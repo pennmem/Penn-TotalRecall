@@ -8,6 +8,5 @@
 	<classpathentry kind="lib" path="lib/signalproc.jar"/>
 	<classpathentry kind="lib" path="test/lib/log4j-1.2.15.jar"/>
 	<classpathentry kind="lib" path="lib/OrangeExtensions-2010-04-05.jar"/>
-	<classpathentry kind="lib" path="lib/commons-io-1.4.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
