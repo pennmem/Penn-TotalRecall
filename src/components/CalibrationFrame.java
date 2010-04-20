@@ -30,6 +30,8 @@ public class CalibrationFrame extends JFrame {
 	private PrecisionPlayer player;
 	private boolean audioError = false;
 	
+	private JSlider slider;
+	
 	private static CalibrationFrame instance;
 	
 	private CalibrationFrame() {
@@ -58,6 +60,7 @@ public class CalibrationFrame extends JFrame {
 		String tmpDirPath = System.getProperty("java.io.tmpdir");
 		String tmpFileName = Long.toString(System.nanoTime()) + "_penntotalrecall.wav";
 		File extractedBeep = new File(tmpDirPath, tmpFileName);
+		extractedBeep.deleteOnExit();
 		FileOutputStream out = null;
 		try {
 			out = new FileOutputStream(extractedBeep);
@@ -116,7 +119,7 @@ public class CalibrationFrame extends JFrame {
 		
 		
 		JPanel sliderPanel = new JPanel();
-		JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 50, 0);
+		slider = new JSlider(JSlider.HORIZONTAL, 0, 50, 0);
 		panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 		slider.setMinorTickSpacing(1);
 		slider.setMajorTickSpacing(10);
@@ -158,13 +161,18 @@ public class CalibrationFrame extends JFrame {
 	
 	private class PlaySampleAction extends AbstractAction {
 		
+		private static final int ms200 = (int)(44100./5.);
+		
 		public PlaySampleAction() {
 			putValue(NAME, "Play");
 		}
 		
 		public void actionPerformed(ActionEvent e) {
 			if(audioError != true) {
-				player.playShortInterval(0, 44100);
+				int sliderOffsetMs = (int)(slider.getValue() * 44.1);
+				int end = sliderOffsetMs + ms200;
+				System.out.println("playing: " + sliderOffsetMs + " to " + end);
+				player.playShortInterval(sliderOffsetMs, end);
 			}
 			else {
 				GiveMessage.errorMessage("Cannot load audio system.\nYou may need to reinstall " + Constants.programName + ".");
