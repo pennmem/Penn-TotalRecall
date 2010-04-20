@@ -35,7 +35,7 @@ public class CalibrationFrame extends JFrame {
 	private static CalibrationFrame instance;
 	
 	private CalibrationFrame() {
-		setSize(600, 300);
+		setSize(1200, 300);
 		setTitle("Audio Calibration");
 		setLocation(GUIUtils.chooseLocation(this));
 		
@@ -102,10 +102,7 @@ public class CalibrationFrame extends JFrame {
 				catch(IOException e) {}
 			}
 		}
-		
-		
-		System.out.println("extracting beep to: " + extractedBeep.getAbsolutePath());
-		
+			  		
 		try {
 			player = new NativeStatelessPlayer();
 			player.open(extractedBeep.getAbsolutePath());
@@ -148,6 +145,10 @@ public class CalibrationFrame extends JFrame {
 		buff.append("<p>To calibrate your audio system, please move the slider to the smallest value for which you hear a sound when you hit the Play button.</p>");
 		buff.append("<br>");
 		buff.append("<p>For example, if you hear nothing at all when the slider is on 5, but hear a tiny blip when the slider is on 6, choose 6.</p>");		
+		buff.append("<br>");
+		buff.append("<p>Make sure your volume is turned up so you don't miss quiet sounds.</p>");
+		buff.append("<br>");
+		buff.append("<p>Common values are 1 (Mac), 17 (Linux), 151 (Windows), but your system may be very different.</p>");
 		buff.append("</html>");
 		return buff.toString();
 	}
