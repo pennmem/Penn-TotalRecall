@@ -19,6 +19,8 @@ import info.Constants;
 import java.io.File;
 import java.util.List;
 
+import control.CurAudio;
+
 import edu.upenn.psych.memory.precisionplayer.PrecisionEvent;
 import edu.upenn.psych.memory.precisionplayer.PrecisionEventLauncher;
 import edu.upenn.psych.memory.precisionplayer.PrecisionListener;
@@ -39,7 +41,7 @@ public class NativeStatelessPlaybackThread extends Thread {
 		this.audioFile = file;
 		this.listeners = listeners;
 		this.startFrame = startFrame;
-		this.endFrame = endFrame;
+		this.endFrame = (long) (endFrame + CurAudio.getOffset() * 44.1);
 		this.myPlayer = player;
 		this.myLib = lib;
 		this.finish = false;
