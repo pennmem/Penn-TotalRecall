@@ -47,7 +47,7 @@ import components.MySplitPane;
 //DO acceleration/deceleration to minimize instances of position correction from excessive stream/sysclock disparity, other sources of itnerpolation errors too
 //DO latency offset correction feature for dev-mode at least
 
-//IMPROVE FMOD Java has to stop native thread for pauses and EOM, once this is done submit to FMOD Wiki
+//IMPROVE FMOD self-stopping not releasing sound and error with Channel.getPosition() in streamPosition() submit to FMOD Wiki once resolved
 //IMPROVE FMOD system is accessed from multiple threads, contra the API spec. This is an invitation for disaster.
 
 //IMPROVE BUILD: msvc compiler warnings
