@@ -211,14 +211,14 @@ EXPORT_DLL long long streamPosition(void)
 		return -1;
 	}
 
-	FMOD_System_Update(fmsystem);
-
 	result = FMOD_Channel_GetPosition(channel, &frames, FMOD_TIMEUNIT_PCM);
 	if ((result != FMOD_OK) && (result != FMOD_ERR_INVALID_HANDLE) && (result != FMOD_ERR_CHANNEL_STOLEN)) {
 		fprintf(stderr, "exceptional return value for FMOD::Channel.getPosition() in streamPosition()\n");
 		printError(result);
 		return -1;
 	}
+
+	FMOD_System_Update(fmsystem);
 
 	return frames - lastStartFrame;
 }
