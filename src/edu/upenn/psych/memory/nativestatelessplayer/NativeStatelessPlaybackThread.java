@@ -93,17 +93,6 @@ public class NativeStatelessPlaybackThread extends Thread {
 			while(finish == false) {
 				long framesElapsed = myLib.streamPosition();				
 				long curFrame = framesElapsed + startFrame;				
-				if(curFrame >= endFrame) {
-					if(curFrame > Integer.MAX_VALUE) {
-						//this may be JNA number representation related, they warn not to use Java long
-						System.err.println("applying FMOD last-frame-is-huge workaround");
-						curFrame = endFrame;
-					}
-					else {
-						stopPlayback();
-					}
-				}
-				
 				if(listeners != null) {
 					if(framesElapsed > 0) {
 						for(PrecisionListener ppl: listeners) {
@@ -122,7 +111,6 @@ public class NativeStatelessPlaybackThread extends Thread {
 				}
 			}
 			if(finish == false) {
-				myLib.stopPlayback(); //this is EOM. we must still call stopPlayback() to close the native stream 
 				if(listeners != null) {					
 					//there is no way to guarantee the hearing frame at this line is actually the final frame
 					//however, PrecisionPlayer requires EOM events report that they occur at the final frame, so we oblige
