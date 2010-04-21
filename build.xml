@@ -7,7 +7,7 @@
 	    Java - Any system with JDK 6+ should be able to create the runnable jar file (package_jar) which makes the program GUI sans audio system.
                If you get compiler errors about the Desktop class it's because Ant is trying to compile against the Java 5 libraries.
         Native - If you have a supported C-compiler installed (Linux: gcc/make and libc6 for 32 and 64, Mac: standard XCode tools, Windows: Visual C++)
-                 your can also compile the audio system (compile_native) and move those libraries to your appropriate system path (install_native).
+                 you can also compile the audio system and move those libraries to your appropriate system path (install_native).
                  That is all you need to run the full program.
 		         Launch the program with java -jar dist/PennTotalRecall.jar
 	
