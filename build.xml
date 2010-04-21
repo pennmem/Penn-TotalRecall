@@ -61,7 +61,10 @@
       </fileset>
     </path>
 
-
+	<!-- Detect Windows -->
+	<condition property="isWindows">
+		<os family="windows" />
+	</condition>
 
 
 
@@ -191,11 +194,21 @@
 	</target>
 
 	<!-- Move native libraries to system paths. -->
-	<target name="install_native" depends="compile_native" description="move native audio libraries into system library directory">
+	<target name="install_native" depends="compile_native,-install_native_posix,-install_native_windows" description="move native audio libraries into system library directory"/>
+	
+	<target name="-install_native_posix">
         <echo message="CALLING NATIVE make install TO MOVE AUDIO LIBRARIES TO SYSTEM PATHS"/>
         <exec dir="${fmod_posix_build}" executable="make" os="Linux || Mac OS X" failonerror="true">
             <arg value="install"/>
         </exec>
+	</target>
+	
+	<target name="-install_native_windows" if="isWindows">
+		<echo message="MOVING ALL DLL's TO System32"/>
+		<move file="${tmp}/penntotalrecall64.dll" todir="C:/Windows/System32/"/>
+		<move file="${tmp}/penntotalrecall.dll" todir="C:/Windows/System32/"/>
+		<copy file="${native}/fmod/lib/win64/fmodex64.dll" todir="C:/Windows/System32/"/>
+		<copy file="${native}/fmod/lib/win32/fmodex.dll" todir="C:/Windows/System32/"/>
 	</target>
 
 
