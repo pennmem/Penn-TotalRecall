@@ -48,7 +48,7 @@ int lastStartFrame = 0;
 
 
 static void printError(FMOD_RESULT result);
-
+static FMOD_RESULT F_CALLBACK soundEndCallback(FMOD_CHANNEL *channel, FMOD_CHANNEL_CALLBACKTYPE type, void *commanddata1, void *commanddata2);
 
 
 
@@ -110,6 +110,13 @@ EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long end
 		fprintf(stderr, "exceptional return value for FMOD::System.playSound() in startPlayback()\n");
 		printError(result);
 		stopPlayback();
+		return -1;
+	}
+
+	result = FMOD_Channel_SetCallback(channel, soundEndCallback);
+	if ((result != FMOD_OK) && (result != FMOD_ERR_INVALID_HANDLE) && (result != FMOD_ERR_CHANNEL_STOLEN)) {
+		fprintf(stderr, "exceptional return value for FMOD::System.setCallback() in startPlayback()\n");
+		printError(result);
 		return -1;
 	}
 
@@ -244,4 +251,12 @@ EXPORT_DLL const char* getLibraryName(void)
 static void printError(FMOD_RESULT result)
 {
     fprintf(stderr, "FMOD error: (%d) %s\n", result, FMOD_ErrorString(result));
+}
+
+static FMOD_RESULT F_CALLBACK soundEndCallback(FMOD_CHANNEL *channel, FMOD_CHANNEL_CALLBACKTYPE type, void *commanddata1, void *commanddata2)
+{
+	if (type ==  FMOD_CHANNEL_CALLBACKTYPE_END) {
+		fprintf(stderr, "STOP\n");
+	}
+	return FMOD_OK;
 }
