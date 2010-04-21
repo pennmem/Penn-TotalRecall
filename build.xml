@@ -61,9 +61,12 @@
       </fileset>
     </path>
 
-	<!-- Detect Windows -->
+	<!-- Detect OS -->
 	<condition property="isWindows">
 		<os family="windows" />
+	</condition>
+	<condition property="isUnix">
+		<os family="unix" />
 	</condition>
 
 
@@ -196,7 +199,7 @@
 	<!-- Move native libraries to system paths. -->
 	<target name="install_native" depends="compile_native,-install_native_posix,-install_native_windows" description="move native audio libraries into system library directory"/>
 	
-	<target name="-install_native_posix">
+	<target name="-install_native_posix" if="isUnix">
         <echo message="CALLING NATIVE make install TO MOVE AUDIO LIBRARIES TO SYSTEM PATHS"/>
         <exec dir="${fmod_posix_build}" executable="make" os="Linux || Mac OS X" failonerror="true">
             <arg value="install"/>
