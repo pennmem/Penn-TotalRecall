@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "PennTotalRecall"
-!define PRODUCT_VERSION "1.00"
+!define PRODUCT_VERSION "0.54"
 !define PRODUCT_PUBLISHER "Computational Memory Lab"
 !define PRODUCT_WEB_SITE "http://memory.psych.upenn.edu/TotalRecall"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\PennTotalRecall.exe"
