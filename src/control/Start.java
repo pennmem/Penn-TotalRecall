@@ -103,6 +103,7 @@ public class Start {
 		MyFrame.getInstance().setVisible(true);
 		new CheckUpdatesAction(false).actionPerformed(new ActionEvent(MyFrame.getInstance(), ActionEvent.ACTION_PERFORMED, null));
 		checkIfFirstRun();
+		loadAndCheckCalibration();
 	}
 
 	/**
@@ -143,6 +144,16 @@ public class Start {
 		int halfway = UserPrefs.prefs.getInt(UserPrefs.windowHeight, UserPrefs.defaultWindowHeight)/2;
 		dividerLocation = UserPrefs.prefs.getInt(UserPrefs.dividerLocation, halfway);
 		MySplitPane.getInstance().setDividerLocation(dividerLocation);	
+	}
+
+	private void loadAndCheckCalibration() {
+		int offset = UserPrefs.prefs.getInt(UserPrefs.audioOffsetFrames, UserPrefs.defaultAudioOffsetFrames);
+		CurAudio.setOffsetFrames(Math.max(0, offset));
+		if(offset < 1 && SysInfo.sys.isMacOSX == false) {
+			String line1 = "Please calibrate your audio system by going to Controls --> Calibrate.";
+			String line2 = "Failing to do so may result in substantially inaccurate annotations in Linux and Windows.";
+			GiveMessage.infoMessage(line1 + "\n" + line2);
+		}		
 	}
 	
 	/**
