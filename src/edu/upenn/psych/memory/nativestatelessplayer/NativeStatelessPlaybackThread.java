@@ -50,7 +50,7 @@ public class NativeStatelessPlaybackThread extends Thread {
 	@Override
 	public void run() {
 		try {
-			System.out.println(getClass().getName() + ": " + startFrame + " to " + endFrame);
+//			System.out.println(getClass().getName() + ": " + startFrame + " to " + endFrame);
 			int returnCode = myLib.startPlayback(audioFile.getAbsolutePath(), startFrame, endFrame);
 
 			if(returnCode < 0) {
