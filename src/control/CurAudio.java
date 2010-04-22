@@ -479,11 +479,11 @@ public class CurAudio {
 		return desiredLoudness;
 	}
 
-	public static void setOffset(int i) {
+	public static void setOffsetFrames(int i) {
 		offset = i;
 	}
 	
-	public static int getOffset() {
+	public static int getOffsetFrames() {
 		return offset;
 	}
 }

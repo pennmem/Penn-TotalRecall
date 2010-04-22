@@ -125,7 +125,7 @@ public class CalibrationFrame extends JFrame {
 			public void stateChanged(ChangeEvent e) {
 				int curVal = slider.getValue();
 				if(curVal > 0) {
-					CurAudio.setOffset(curVal - 1);
+					CurAudio.setOffsetFrames((int)(44.1 * (curVal - 1)));
 				}
 			}			
 		});
@@ -182,7 +182,8 @@ public class CalibrationFrame extends JFrame {
 			if(audioError != true) {
 				int sliderOffsetMs = (int)(slider.getValue() * 44.1);
 				int end = sliderOffsetMs + ms200;
-				System.out.println("playing: " + sliderOffsetMs + " to " + end);
+				end -= CurAudio.getOffsetFrames();
+				System.out.println(getClass().getName() + ": " + sliderOffsetMs + " to " + end);
 				player.playShortInterval(sliderOffsetMs, end);
 			}
 			else {
