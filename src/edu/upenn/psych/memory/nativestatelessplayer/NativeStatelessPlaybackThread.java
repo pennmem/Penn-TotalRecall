@@ -1,3 +1,5 @@
+package edu.upenn.psych.memory.nativestatelessplayer;
+
 //    This file is part of Penn TotalRecall <http://memory.psych.upenn.edu/TotalRecall>.
 //
 //    TotalRecall is free software: you can redistribute it and/or modify
@@ -14,8 +16,6 @@
 
 import java.io.File;
 import java.util.List;
-
-import control.CurAudio;
 
 import edu.upenn.psych.memory.precisionplayer.PrecisionEvent;
 import edu.upenn.psych.memory.precisionplayer.PrecisionEventLauncher;
@@ -37,7 +37,7 @@ public class NativeStatelessPlaybackThread extends Thread {
 		this.audioFile = file;
 		this.listeners = listeners;
 		this.startFrame = startFrame;
-		this.endFrame = (long) (endFrame + CurAudio.getOffset() * 44.1);
+		this.endFrame = endFrame;
 		this.myPlayer = player;
 		this.myLib = lib;
 		this.finish = false;
