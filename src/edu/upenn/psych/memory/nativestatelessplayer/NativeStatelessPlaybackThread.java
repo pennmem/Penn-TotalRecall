@@ -12,10 +12,6 @@
 //    You should have received a copy of the GNU General Public License
 //    along with TotalRecall.  If not, see <http://www.gnu.org/licenses/>.
 
-package edu.upenn.psych.memory.nativestatelessplayer;
-
-import info.Constants;
-
 import java.io.File;
 import java.util.List;
 
@@ -72,7 +68,7 @@ public class NativeStatelessPlaybackThread extends Thread {
 				default: 
 					String os = System.getProperty("os.name");
 					if(os != null && os.toLowerCase().contains("linux")) {
-						message += "\n" + Constants.programName + " prefers exclusive access to the sound system.\n" +
+						message += "\nAudio playback prefers exclusive access to the sound system.\n" +
 						"Please close all sound-emitting programs and web pages and try again.";
 					}
 					else {
