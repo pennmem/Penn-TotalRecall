@@ -45,11 +45,10 @@ FMOD_SOUND *sound = NULL;
 FMOD_CHANNEL *channel = NULL;
 FMOD_CREATESOUNDEXINFO soundInfo;
 int lastStartFrame = 0;
-int userStop = 0;
 
 
 static void printError(FMOD_RESULT result);
-static FMOD_RESULT F_CALLBACK soundEndCallback(FMOD_CHANNEL *channel, FMOD_CHANNEL_CALLBACKTYPE type, void *commanddata1, void *commanddata2);
+
 
 
 
@@ -57,7 +56,6 @@ EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long end
 {
     unsigned int hiclock = 0, loclock = 0;
 	FMOD_RESULT result = FMOD_OK;
-	userStop = 0;
 
 	if (fmsystem != NULL || sound != NULL || channel != NULL || lastStartFrame != 0) {
 		fprintf(stderr, "startPlayback() called in inconsistent state, trying to correct\n");
@@ -115,13 +113,6 @@ EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long end
 		return -1;
 	}
 
-	result = FMOD_Channel_SetCallback(channel, soundEndCallback);
-	if ((result != FMOD_OK) && (result != FMOD_ERR_INVALID_HANDLE) && (result != FMOD_ERR_CHANNEL_STOLEN)) {
-		fprintf(stderr, "exceptional return value for FMOD::System.setCallback() in startPlayback()\n");
-		printError(result);
-		return -1;
-	}
-
     FMOD_System_GetDSPClock(fmsystem, &hiclock, &loclock); 
     FMOD_64BIT_ADD(hiclock, loclock, 0, endFrame - startFrame);
     result = FMOD_Channel_SetDelay(channel, FMOD_DELAYTYPE_DSPCLOCK_END, hiclock, loclock);
@@ -157,7 +148,6 @@ EXPORT_DLL long long stopPlayback(void)
 {
 	FMOD_RESULT result = FMOD_OK;
 	long long toReturn;
-	userStop = 1;
 
 	if (fmsystem == NULL || sound == NULL || channel == NULL) {
 		fprintf(stderr, "stopPlayback() called in inconsistent state\n");
@@ -167,7 +157,7 @@ EXPORT_DLL long long stopPlayback(void)
 
     if(sound != NULL) {
       result = FMOD_Sound_Release(sound);
-
+    
       if (result != FMOD_OK) {
 		fprintf(stderr, "exceptional return value for FMOD::Sound.release() in stopPlayback()\n");
 		printError(result);
@@ -211,14 +201,14 @@ EXPORT_DLL long long streamPosition(void)
 		return -1;
 	}
 
+	FMOD_System_Update(fmsystem);
+
 	result = FMOD_Channel_GetPosition(channel, &frames, FMOD_TIMEUNIT_PCM);
 	if ((result != FMOD_OK) && (result != FMOD_ERR_INVALID_HANDLE) && (result != FMOD_ERR_CHANNEL_STOLEN)) {
 		fprintf(stderr, "exceptional return value for FMOD::Channel.getPosition() in streamPosition()\n");
 		printError(result);
 		return -1;
 	}
-
-	FMOD_System_Update(fmsystem);
 
 	return frames - lastStartFrame;
 }
@@ -254,36 +244,4 @@ EXPORT_DLL const char* getLibraryName(void)
 static void printError(FMOD_RESULT result)
 {
     fprintf(stderr, "FMOD error: (%d) %s\n", result, FMOD_ErrorString(result));
-}
-
-static FMOD_RESULT F_CALLBACK soundEndCallback(FMOD_CHANNEL *chan, FMOD_CHANNEL_CALLBACKTYPE type, void *commanddata1, void *commanddata2)
-{
-	FMOD_RESULT result = FMOD_OK;
-
-	if (type ==  FMOD_CHANNEL_CALLBACKTYPE_END && userStop == 0) {
-
-	    if(fmsystem != NULL) {
-	      result = FMOD_System_Close(fmsystem);
-	      if (result != FMOD_OK) {
-			fprintf(stderr, "exceptional return value for FMOD::System.close() in callback\n");
-			printError(result);
-			return -1;
-	      }
-	    }
-
-	    if(fmsystem != NULL) {
-	      result = FMOD_System_Release(fmsystem);
-	      if (result != FMOD_OK) {
-			fprintf(stderr, "exceptional return value for FMOD::System.release() in callback\n");
-			printError(result);
-			return -1;
-	      }
-	    }
-
-		fmsystem = NULL;
-		sound = NULL;
-		channel = NULL;
-		lastStartFrame = 0;
-	}
-	return FMOD_OK;
 }
