@@ -183,7 +183,7 @@ public class CalibrationFrame extends JFrame {
 				int sliderOffsetMs = (int)(slider.getValue() * 44.1);
 				int end = sliderOffsetMs + ms200;
 				end -= CurAudio.getOffsetFrames();
-				System.out.println(getClass().getName() + ": " + sliderOffsetMs + " to " + end);
+//				System.out.println(getClass().getName() + ": " + sliderOffsetMs + " to " + end);
 				player.playShortInterval(sliderOffsetMs, end);
 			}
 			else {
