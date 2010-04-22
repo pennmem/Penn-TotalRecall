@@ -207,11 +207,15 @@
 	</target>
 	
 	<target name="-install_native_windows" if="isWindows">
-		<echo message="MOVING ALL DLL's TO System32"/>
-		<move file="${tmp}/penntotalrecall64.dll" todir="C:/Windows/System32/"/>
-		<move file="${tmp}/penntotalrecall.dll" todir="C:/Windows/System32/"/>
+		<echo message="MOVING DLLs TO System32 AND SysWOW64"/>
 		<copy file="${native}/fmod/lib/win64/fmodex64.dll" todir="C:/Windows/System32/"/>
+		<copy file="${tmp}/penntotalrecall64.dll" todir="C:/Windows/System32/"/>
 		<copy file="${native}/fmod/lib/win32/fmodex.dll" todir="C:/Windows/System32/"/>
+		<copy file="${tmp}/penntotalrecall.dll" todir="C:/Windows/System32/"/>
+		<!-- this double copying is very regrettably necessary as some programs are creating SysWoW64 on 32-bit machines
+		and there's no reliable way to check for 64-bit architecture other than Hotspot's nonstandard sun.arch.data.model -->
+		<copy file="${native}/fmod/lib/win32/fmodex.dll" todir="C:/Windows/SysWOW64/" failonerror="false"/>
+		<copy file="${tmp}/penntotalrecall.dll" todir="C:/Windows/SysWOW64/" failonerror="false"/>
 	</target>
 
 
