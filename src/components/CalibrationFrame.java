@@ -1,9 +1,11 @@
 package components;
 
 import info.Constants;
+import info.UserPrefs;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,10 +40,16 @@ public class CalibrationFrame extends JFrame {
 	
 	private static CalibrationFrame instance;
 	
+	private static final double beepFileFramesPerMs = 44.1;
+	
 	private CalibrationFrame() {
 		setSize(1200, 300);
 		setTitle("Audio Calibration");
 		setLocation(GUIUtils.chooseLocation(this));
+		
+		//gets ride of the java icon in the top left corner of the frame (Windows, GNOME, KDE, among others)
+		setIconImage(Toolkit.getDefaultToolkit().getImage(
+				MyFrame.class.getResource("/images/headphones16.png")));
 		
 		JPanel panel = new JPanel();
 		panel.setOpaque(true);
@@ -121,13 +129,16 @@ public class CalibrationFrame extends JFrame {
 		
 		JPanel sliderPanel = new JPanel();
 		slider = new JSlider(JSlider.HORIZONTAL, 0, 200, 0);
+		slider.setValue((int)Math.round(CurAudio.getOffsetFrames() / beepFileFramesPerMs) + 1);
 		slider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				int curVal = slider.getValue();
-				if(curVal > 0) {
-					CurAudio.setOffsetFrames((int)(44.1 * (curVal - 1)));
+				if(slider.getValueIsAdjusting() == false) {					
+					int curVal = slider.getValue();					
+					int offsetFrames = (int)Math.round(beepFileFramesPerMs * (curVal - 1));
+					UserPrefs.prefs.putInt(UserPrefs.audioOffsetFrames, offsetFrames);
+					CurAudio.setOffsetFrames(offsetFrames);
 				}
-			}			
+			}
 		});
 		panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 		slider.setMinorTickSpacing(1);
@@ -180,7 +191,7 @@ public class CalibrationFrame extends JFrame {
 		
 		public void actionPerformed(ActionEvent e) {
 			if(audioError != true) {
-				int sliderOffsetMs = (int)(slider.getValue() * 44.1);
+				int sliderOffsetMs = (int)Math.round(slider.getValue() * beepFileFramesPerMs);
 				int end = sliderOffsetMs + ms200;
 				end -= CurAudio.getOffsetFrames();
 //				System.out.println(getClass().getName() + ": " + sliderOffsetMs + " to " + end);
