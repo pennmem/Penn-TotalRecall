@@ -1,5 +1,3 @@
-package edu.upenn.psych.memory.nativestatelessplayer;
-
 //    This file is part of Penn TotalRecall <http://memory.psych.upenn.edu/TotalRecall>.
 //
 //    TotalRecall is free software: you can redistribute it and/or modify
@@ -13,6 +11,10 @@ package edu.upenn.psych.memory.nativestatelessplayer;
 //
 //    You should have received a copy of the GNU General Public License
 //    along with TotalRecall.  If not, see <http://www.gnu.org/licenses/>.
+
+package edu.upenn.psych.memory.nativestatelessplayer;
+
+import info.Constants;
 
 import java.io.File;
 import java.util.List;
@@ -46,7 +48,6 @@ public class NativeStatelessPlaybackThread extends Thread {
 	@Override
 	public void run() {
 		try {
-			System.out.println("about to play: " + (int)(startFrame/44.1) + " to " + (int)(endFrame/44.1));
 			int returnCode = myLib.startPlayback(audioFile.getAbsolutePath(), startFrame, endFrame);
 
 			if(returnCode < 0) {
@@ -68,7 +69,7 @@ public class NativeStatelessPlaybackThread extends Thread {
 				default: 
 					String os = System.getProperty("os.name");
 					if(os != null && os.toLowerCase().contains("linux")) {
-						message += "\nAudio playback prefers exclusive access to the sound system.\n" +
+						message += "\n" + Constants.programName + " prefers exclusive access to the sound system.\n" +
 						"Please close all sound-emitting programs and web pages and try again.";
 					}
 					else {
@@ -89,6 +90,17 @@ public class NativeStatelessPlaybackThread extends Thread {
 			while(finish == false) {
 				long framesElapsed = myLib.streamPosition();				
 				long curFrame = framesElapsed + startFrame;				
+				if(curFrame >= endFrame) {
+					if(curFrame > Integer.MAX_VALUE) {
+						//this may be JNA number representation related, they warn not to use Java long
+						System.err.println("applying FMOD last-frame-is-huge workaround");
+						curFrame = endFrame;
+					}
+					else {
+						stopPlayback();
+					}
+				}
+				
 				if(listeners != null) {
 					if(framesElapsed > 0) {
 						for(PrecisionListener ppl: listeners) {
@@ -107,6 +119,7 @@ public class NativeStatelessPlaybackThread extends Thread {
 				}
 			}
 			if(finish == false) {
+				myLib.stopPlayback(); //this is EOM. we must still call stopPlayback() to close the native stream 
 				if(listeners != null) {					
 					//there is no way to guarantee the hearing frame at this line is actually the final frame
 					//however, PrecisionPlayer requires EOM events report that they occur at the final frame, so we oblige
