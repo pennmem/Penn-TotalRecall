@@ -46,7 +46,7 @@ import components.MySplitPane;
 //DO waveform smoothness/jitter, post to javagaming.net
 
 //IMPROVE FMOD self-stopping, huge last frame issue is related
-//IMPROVE FMOD further improvements to end-offset issue in Windows and Linux
+//IMPROVE FMOD further improvements to end-offset issue in Windows and Linux, maybe use huge buffer for interval playback
 //IMPROVE FMOD system is accessed from multiple threads, contra the API spec. This is an invitation for disaster.
 
 //IMPROVE BUILD: msvc compiler warnings
@@ -61,7 +61,6 @@ import components.MySplitPane;
 //V2 8-bit & multi-channel support, aiff, non-44.1khz testing w/r/t offset issue
 //V2 more mouse support
 //V2 uniform persistent preferences w/ caching in memory
-//V2 stdout/stderr log
 public class Start {
 	private static boolean DEV_MODE;
 	
