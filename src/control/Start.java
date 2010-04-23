@@ -40,29 +40,27 @@ import components.MySplitPane;
  * 
  * @author Yuvi Masory
  */
-//BUG in short interval playback the last frame or two reported is often a negative value which is a huge value through JNA, current workaround is kludge
-//BUG jump in progress position when you click the waveform sometimes
-//BUG audio playback slightly off in Windows, use sample.wav
+
 
 //DO acceleration/deceleration to minimize instances of position correction from excessive stream/sysclock disparity, other sources of itnerpolation errors too
-//DO latency offset correction feature for dev-mode at least
+//DO waveform smoothness/jitter, post to javagaming.net
 
-//IMPROVE FMOD self-stopping not releasing sound and error with Channel.getPosition() in streamPosition() submit to FMOD Wiki once resolved
+//IMPROVE FMOD self-stopping, huge last frame issue is related
+//IMPROVE FMOD further improvements to end-offset issue in Windows and Linux
 //IMPROVE FMOD system is accessed from multiple threads, contra the API spec. This is an invitation for disaster.
 
 //IMPROVE BUILD: msvc compiler warnings
 //IMPROVE BUILD: use path + chdir for all platforms
-//IMPROVE BUILD: add signing of .app to ant tasks
+
+//IMPROVE jump in progress position when you click the waveform sometimes, also jump-on-pause back in Linux
 //IMPROVE emacs keybindings pref should take effect immediately
 //IMPROVE examine bandpass lower cutoff for Mike
 //IMPROVE waveform flutter on slower computers at chunk boundaries
 
-//V2 post smoothness issue on javagaming.net
 //V2 triangle/word overlaps
-//V2 sparkle updater using rkuntz.org guide
-//V2 8-bit & multi-channel support, aiff
+//V2 8-bit & multi-channel support, aiff, non-44.1khz testing w/r/t offset issue
 //V2 more mouse support
-//V2 uniform persistent preferences and keybindings w/ caching in memory, plus keybindings changer gui
+//V2 uniform persistent preferences w/ caching in memory
 //V2 stdout/stderr log
 public class Start {
 	private static boolean DEV_MODE;
