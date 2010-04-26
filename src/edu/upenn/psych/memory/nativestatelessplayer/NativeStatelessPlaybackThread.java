@@ -41,7 +41,7 @@ public class NativeStatelessPlaybackThread extends Thread {
 		this.audioFile = file;
 		this.listeners = listeners;
 		this.startFrame = startFrame;
-		this.endFrame = (long) (endFrame + CurAudio.getOffsetFrames());
+		this.endFrame = endFrame + CurAudio.getOffsetFrames();
 		this.myPlayer = player;
 		this.myLib = lib;
 		this.finish = false;
