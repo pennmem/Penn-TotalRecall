@@ -56,6 +56,7 @@ import components.MySplitPane;
 //IMPROVE emacs keybindings pref should take effect immediately
 //IMPROVE examine bandpass lower cutoff for Mike
 //IMPROVE waveform flutter on slower computers at chunk boundaries
+//IMPROVE Patrick feature request: remember previous annotator's name so it doesn't have to be entered repeatedly
 
 //V2 triangle/word overlaps
 //V2 8-bit & multi-channel support, aiff, non-44.1khz testing w/r/t offset issue
