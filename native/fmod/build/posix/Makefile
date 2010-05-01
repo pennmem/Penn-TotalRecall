@@ -17,6 +17,7 @@
 # C compilers tested:
 #	i686-apple-darwin10-gcc-4.2.1 (GCC) 4.2.1 (Apple Inc. build 5646) (dot 1)
 #	gcc (Ubuntu 4.4.1-4ubuntu9) 4.4.1
+#   gcc (Ubuntu 4.4.3-4ubuntu5) 4.4.3
 
 ###############################
 # Set variables
@@ -44,7 +45,7 @@ FMOD_LIB = ../../lib/linux32/libfmodex-*.so
 LIBRARIES64 = -lfmodex64-4.28.09 -L../../lib/linux64/
 FMOD_LIB64 = ../../lib/linux64/libfmodex64-*.so
 BUILD_NAME64 = libpenntotalrecall64.so
-	
+
 endif
 
 ###############################

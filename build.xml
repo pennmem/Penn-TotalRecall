@@ -30,9 +30,9 @@
 
 
     This build file has been tested on:
-        Ant 1.7.1
+        Ant 1.7.1, 1.8
         Mac OSX 10.6 (64 bit) (see Makefile for compiler version)
-        Ubuntu 10.11 (32/64 bit) (see Makefile for compiler version)
+        Ubuntu 9.10/10.04 (32/64 bit) (see Makefile for compiler version)
         Windows 7 (64 bit) (Visual C++ 2008)
 -->
 
