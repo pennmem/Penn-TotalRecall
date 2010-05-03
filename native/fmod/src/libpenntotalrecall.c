@@ -134,7 +134,7 @@ EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long end
     hiclock = hitime;
     loclock = lotime;
     FMOD_64BIT_ADD(hiclock, loclock, 0, startDelayFrames);
-    result = FMOD_Channel_SetDelay(channel, FMOD_DELAYTYPE_DSPCLOCK_END, hiclock, loclock);
+    result = FMOD_Channel_SetDelay(channel, FMOD_DELAYTYPE_DSPCLOCK_START, hiclock, loclock);
 	if (result != FMOD_OK) {
         fprintf(stderr, "exceptional return value for FMOD::Chanel.setDelay() [start] in startPlayback()\n");
         printError(result);
@@ -142,7 +142,8 @@ EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long end
         return -1;
     }
 
-    endDelayFrames = startDelayFrames + (int) (outputRate * ((endFrame - startFrame) / 44100.0));
+/*     endDelayFrames = startDelayFrames + (int) (outputRate * ((endFrame - startFrame) / 44100.0)); */
+    endDelayFrames = startDelayFrames + (endFrame - startFrame);
 
     hiclock = hitime;
     loclock = lotime;
