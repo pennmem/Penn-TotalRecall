@@ -54,7 +54,8 @@ static void printError(FMOD_RESULT result);
 
 EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long endFrame)
 {
-    unsigned int hiclock = 0, loclock = 0;
+    unsigned int hiclock = 0, loclock = 0, adjustedDelay;
+    int outputRate;
 	FMOD_RESULT result = FMOD_OK;
 
 	if (fmsystem != NULL || sound != NULL || channel != NULL || lastStartFrame != 0) {
@@ -113,8 +114,17 @@ EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long end
 		return -1;
 	}
 
+    result = FMOD_System_GetSoftwareFormat(fmsystem, &outputRate, NULL, NULL, NULL, NULL, NULL);
+    if (result != FMOD_OK) {
+      fprintf(stderr, "FMOD error: (%d) %s\n", result, FMOD_ErrorString(result));
+      fprintf(stderr, "cannot determine output format\n");
+      return -1;
+    }
+
+    adjustedDelay = (int) (outputRate * ((endFrame - startFrame) / 44100.0));
+
     FMOD_System_GetDSPClock(fmsystem, &hiclock, &loclock); 
-    FMOD_64BIT_ADD(hiclock, loclock, 0, endFrame - startFrame);
+    FMOD_64BIT_ADD(hiclock, loclock, 0, adjustedDelay);
     result = FMOD_Channel_SetDelay(channel, FMOD_DELAYTYPE_DSPCLOCK_END, hiclock, loclock);
 	if (result != FMOD_OK) {
         fprintf(stderr, "exceptional return value for FMOD::Chanel.setDelay() in startPlayback()\n");
