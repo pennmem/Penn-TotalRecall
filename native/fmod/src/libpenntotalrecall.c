@@ -54,7 +54,7 @@ static void printError(FMOD_RESULT result);
 
 EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long endFrame)
 {
-    unsigned int hiclock = 0, loclock = 0, adjustedDelay;
+    unsigned int hiclock = 0, loclock = 0, hitime, lotime, startDelayFrames, endDelayFrames;
     int outputRate;
 	FMOD_RESULT result = FMOD_OK;
 
@@ -114,6 +114,14 @@ EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long end
 		return -1;
 	}
 
+    result = FMOD_System_GetDSPBufferSize(fmsystem, &startDelayFrames, 0);
+    if (result != FMOD_OK) {
+      fprintf(stderr, "FMOD error: (%d) %s\n", result, FMOD_ErrorString(result));
+      fprintf(stderr, "cannot determine buffer size\n");
+      return -1;
+    }
+    startDelayFrames *= 2;
+
     result = FMOD_System_GetSoftwareFormat(fmsystem, &outputRate, NULL, NULL, NULL, NULL, NULL);
     if (result != FMOD_OK) {
       fprintf(stderr, "FMOD error: (%d) %s\n", result, FMOD_ErrorString(result));
@@ -121,17 +129,31 @@ EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long end
       return -1;
     }
 
-    adjustedDelay = (int) (outputRate * ((endFrame - startFrame) / 44100.0));
+    FMOD_System_GetDSPClock(fmsystem, &hitime, &lotime);
 
-    FMOD_System_GetDSPClock(fmsystem, &hiclock, &loclock); 
-    FMOD_64BIT_ADD(hiclock, loclock, 0, adjustedDelay);
+    hiclock = hitime;
+    loclock = lotime;
+    FMOD_64BIT_ADD(hiclock, loclock, 0, startDelayFrames);
     result = FMOD_Channel_SetDelay(channel, FMOD_DELAYTYPE_DSPCLOCK_END, hiclock, loclock);
 	if (result != FMOD_OK) {
-        fprintf(stderr, "exceptional return value for FMOD::Chanel.setDelay() in startPlayback()\n");
+        fprintf(stderr, "exceptional return value for FMOD::Chanel.setDelay() [start] in startPlayback()\n");
         printError(result);
 		stopPlayback();
         return -1;
     }
+
+    endDelayFrames = startDelayFrames + (int) (outputRate * ((endFrame - startFrame) / 44100.0));
+
+    hiclock = hitime;
+    loclock = lotime;
+    FMOD_64BIT_ADD(hiclock, loclock, 0, endDelayFrames);
+    result = FMOD_Channel_SetDelay(channel, FMOD_DELAYTYPE_DSPCLOCK_END, hiclock, loclock);
+    if (result != FMOD_OK) {
+      fprintf(stderr, "FMOD error: (%d) %s\n", result, FMOD_ErrorString(result));
+      fprintf(stderr, "exceptional return value for FMOD::Chanel.setDelay() [end] in startPlayback()\n");
+      return -1;
+    }
+
 
 	result = FMOD_Channel_SetVolume(channel, 1);
 	if ((result != FMOD_OK) && (result != FMOD_ERR_INVALID_HANDLE) && (result != FMOD_ERR_CHANNEL_STOLEN)) {
