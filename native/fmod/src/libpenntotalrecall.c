@@ -142,8 +142,8 @@ EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long end
         return -1;
     }
 
-/*     endDelayFrames = startDelayFrames + (int) (outputRate * ((endFrame - startFrame) / 44100.0)); */
-    endDelayFrames = startDelayFrames + (endFrame - startFrame);
+    endDelayFrames = startDelayFrames + (int) (outputRate * ((endFrame - startFrame) / 44100.0));
+    /* endDelayFrames = startDelayFrames + (endFrame - startFrame); */
 
     hiclock = hitime;
     loclock = lotime;
