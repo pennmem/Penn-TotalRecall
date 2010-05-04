@@ -40,28 +40,6 @@ import components.MySplitPane;
  * 
  * @author Yuvi Masory
  */
-
-
-//DO acceleration/deceleration to minimize instances of position correction from excessive stream/sysclock disparity, other sources of itnerpolation errors too
-//DO waveform smoothness/jitter, post to javagaming.net
-
-//IMPROVE FMOD self-stopping, huge last frame issue is related
-//IMPROVE FMOD further improvements to end-offset issue in Windows and Linux, maybe use huge buffer for interval playback
-//IMPROVE FMOD system is accessed from multiple threads, contra the API spec. This is an invitation for disaster.
-
-//IMPROVE BUILD: msvc compiler warnings
-//IMPROVE BUILD: use path + chdir for all platforms
-
-//IMPROVE jump in progress position when you click the waveform sometimes, also jump-on-pause back in Linux
-//IMPROVE emacs keybindings pref should take effect immediately
-//IMPROVE examine bandpass lower cutoff for Mike
-//IMPROVE waveform flutter on slower computers at chunk boundaries
-//IMPROVE Patrick feature request: remember previous annotator's name so it doesn't have to be entered repeatedly
-
-//V2 triangle/word overlaps
-//V2 8-bit & multi-channel support, aiff, non-44.1khz testing w/r/t offset issue
-//V2 more mouse support
-//V2 uniform persistent preferences w/ caching in memory
 public class Start {
 	private static boolean DEV_MODE;
 	
@@ -101,7 +79,6 @@ public class Start {
 		MyFrame.getInstance().setVisible(true);
 		new CheckUpdatesAction(false).actionPerformed(new ActionEvent(MyFrame.getInstance(), ActionEvent.ACTION_PERFORMED, null));
 		checkIfFirstRun();
-		loadAndCheckCalibration();
 	}
 
 	/**
@@ -142,16 +119,6 @@ public class Start {
 		int halfway = UserPrefs.prefs.getInt(UserPrefs.windowHeight, UserPrefs.defaultWindowHeight)/2;
 		dividerLocation = UserPrefs.prefs.getInt(UserPrefs.dividerLocation, halfway);
 		MySplitPane.getInstance().setDividerLocation(dividerLocation);	
-	}
-
-	private void loadAndCheckCalibration() {
-		int offset = UserPrefs.prefs.getInt(UserPrefs.audioOffsetFrames, UserPrefs.defaultAudioOffsetFrames);
-		CurAudio.setOffsetFrames(Math.max(0, offset));
-		if(offset < 1 && SysInfo.sys.isMacOSX == false) {
-			String line1 = "Please calibrate your audio system by going to Controls --> Calibrate.";
-			String line2 = "Failing to do so may result in substantially inaccurate annotations in Linux and Windows.";
-			GiveMessage.infoMessage(line1 + "\n" + line2);
-		}		
 	}
 	
 	/**
