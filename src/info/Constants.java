@@ -41,7 +41,7 @@ public class Constants {
 	 * 
 	 * Must use delimiter found in <code>programVersionDelimiter</code>.
 	 */
-	public static final String programVersion = "0.54";
+	public static final String programVersion = "0.00";
 	
 	/**
 	 * Regex delimiter used in programVersion String, given in the form usable by the Pattern class.
