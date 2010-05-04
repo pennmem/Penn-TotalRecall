@@ -53,7 +53,7 @@ extern "C" {
 #endif
 
 /* define library's exposed API */
-EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long endFrame);
+EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long endFrame, int frameRate);
 EXPORT_DLL long long stopPlayback(void);
 EXPORT_DLL long long streamPosition(void);
 EXPORT_DLL int playbackInProgress(void);

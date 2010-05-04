@@ -52,7 +52,7 @@ static void printError(FMOD_RESULT result);
 
 
 
-EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long endFrame)
+EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long endFrame, int frameRate)
 {
     unsigned int hiclock = 0, loclock = 0, hitime, lotime, startDelayFrames, endDelayFrames;
     int outputRate;
@@ -142,7 +142,7 @@ EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long end
         return -1;
     }
 
-    endDelayFrames = startDelayFrames + (int) (outputRate * ((endFrame - startFrame) / 44100.0));
+    endDelayFrames = startDelayFrames + (int) (outputRate * ((endFrame - startFrame) / (double)(frameRate)));
     /* endDelayFrames = startDelayFrames + (endFrame - startFrame); */
 
     hiclock = hitime;
