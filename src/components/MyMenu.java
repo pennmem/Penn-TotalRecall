@@ -141,7 +141,6 @@ public class MyMenu extends JMenuBar {
 			jmAudio.setMnemonic(KeyEvent.VK_C);
 		}
 		
-		JMenuItem jmiCalibrate = new JMenuItem(new CalibrateAction());
 		//see PlayPauseAction docs for explanation of this funniness
 		JMenuItem jmiPlayPause = new JMenuItem(
 				new PlayPauseAction(true));
@@ -187,8 +186,11 @@ public class MyMenu extends JMenuBar {
 		jmSeek.add(jmiLast200MoveRight);
 		jmSeek.add(jmiLast200MoveLeft);
 
-		jmAudio.add(jmiCalibrate);
-		jmAudio.addSeparator();
+		if(SysInfo.sys.isWindowsAny) {
+			JMenuItem jmiCalibrate = new JMenuItem(new CalibrateAction());
+			jmAudio.add(jmiCalibrate);
+			jmAudio.addSeparator();
+		}
 		jmAudio.add(jmiPlayPause);
 		jmAudio.add(jmiStop);
 		jmAudio.add(jmiReplay);
