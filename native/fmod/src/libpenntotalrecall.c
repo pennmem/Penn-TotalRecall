@@ -52,10 +52,11 @@ static void printError(FMOD_RESULT result);
 
 
 
-EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long endFrame, int frameRate)
+EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long endFrame)
 {
     unsigned int hiclock = 0, loclock = 0, hitime, lotime, startDelayFrames, endDelayFrames;
     int outputRate;
+    float inputRate;
 	FMOD_RESULT result = FMOD_OK;
 
 	if (fmsystem != NULL || sound != NULL || channel != NULL || lastStartFrame != 0) {
@@ -106,6 +107,15 @@ EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long end
 		return -3;
 	}
 
+    result = FMOD_Sound_GetDefaults(sound, &inputRate, NULL, NULL, NULL);
+	if (result != FMOD_OK) {
+		fprintf(stderr, "exceptional return value for FMOD::System.getDefaults() in startPlayback()\n");
+		printError(result);
+		stopPlayback();
+		return -3;
+	}
+
+
 	result = FMOD_System_PlaySound(fmsystem, FMOD_CHANNEL_FREE, sound, TRUE, &channel);
 	if (result != FMOD_OK) {
 		fprintf(stderr, "exceptional return value for FMOD::System.playSound() in startPlayback()\n");
@@ -142,7 +152,7 @@ EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long end
         return -1;
     }
 
-    endDelayFrames = startDelayFrames + (int) (outputRate * ((endFrame - startFrame) / (double)(frameRate)));
+    endDelayFrames = startDelayFrames + (int) (outputRate * ((endFrame - startFrame) / (double)(inputRate)));
     /* endDelayFrames = startDelayFrames + (endFrame - startFrame); */
 
     hiclock = hitime;

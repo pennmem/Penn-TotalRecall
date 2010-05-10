@@ -55,10 +55,9 @@ public final class LibPennTotalRecall {
 	 * @param canonicalPath File path
 	 * @param startFrame First frame of audio in the file to render
 	 * @param endFrame Last frame of audio in the file to render
-	 * @param frameRate The framerate of the input source
 	 * @return Return-code, see above
 	 */
-	public native int startPlayback(String canonicalPath, long startFrame, long endFrame, int frameRate);
+	public native int startPlayback(String canonicalPath, long startFrame, long endFrame);
 	
 
 	/**
