@@ -69,24 +69,26 @@ all: $(PLATFORM)_all
 Darwin_all:
 	 mkdir -p ../../../../tmp
 	 gcc $(SHARED_OPT) $(GENERAL_CFLAGS) $(PLATFORM_CFLAGS) -o $(BUILD_DIR)$(BUILD_NAME) $(SOURCE) $(LIBRARIES)
+	 sudo chmod ugo+rx $(BUILD_DIR)$(BUILD_NAME)
+
 
 Linux_all: Darwin_all
 	 gcc $(SHARED_OPT) $(GENERAL_CFLAGS) $(PLATFORM_CFLAGS64) -o $(BUILD_DIR)$(BUILD_NAME64) $(SOURCE) $(LIBRARIES64)
+	 sudo chmod ugo+rx $(BUILD_DIR)$(BUILD_NAME64)
 
-	
 install: $(PLATFORM)_install
 
 Darwin_install:
 	sudo mv $(BUILD_DIR)$(BUILD_NAME) $(INSTALL_DIR)
-	sudo cp $(FMOD_LIB) $(INSTALL_DIR)
+	sudo cp -p $(FMOD_LIB) $(INSTALL_DIR)
 
 Linux_install: Darwin_install
-	sudo cp $(FMOD_LIB64) $(INSTALL_DIR)
 	sudo mv $(BUILD_DIR)$(BUILD_NAME64) $(INSTALL_DIR)
+	sudo cp -p $(FMOD_LIB64) $(INSTALL_DIR)
 
 
 uninstall: $(PLATFORM)_uninstall
-	
+
 Darwin_uninstall:
 	sudo rm -f $(INSTALL_DIR)$(BUILD_NAME)
 
