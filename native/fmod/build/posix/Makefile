@@ -78,12 +78,12 @@ install: $(PLATFORM)_install
 
 Darwin_install:
 	sudo mv $(BUILD_DIR)$(BUILD_NAME) $(INSTALL_DIR)
-	sudo chmod ugo+rx $(BUILD_DIR)$(BUILD_NAME)
+	sudo chmod ugo+rx $(INSTALL_DIR)$(BUILD_NAME)
 	sudo cp -p $(FMOD_LIB) $(INSTALL_DIR)
 
 Linux_install: Darwin_install
 	sudo mv $(BUILD_DIR)$(BUILD_NAME64) $(INSTALL_DIR)
-	sudo chmod ugo+rx $(BUILD_DIR)$(BUILD_NAME64)
+	sudo chmod ugo+rx $(INSTALL_DIR)$(BUILD_NAME64)
 	sudo cp -p $(FMOD_LIB64) $(INSTALL_DIR)
 
 
