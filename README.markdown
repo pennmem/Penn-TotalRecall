@@ -1,5 +1,5 @@
 # Penn TotalRecall #
-## An easy-to-use tool for quickly annotating audio files. ##
+## An easy-to-use tool for quickly annotating audio files ##
 
 ### Overview ###
 TotalRecall is designed for precise scoring and timing of participant responses during verbal tasks, especially Free Recall.

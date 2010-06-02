@@ -5,8 +5,6 @@ End-chopping behavior (~15ms) eliminated from Control-Z action
 Windows version released
 
 == Version 0.53 ==
-Features:
-	Linux version released
-	replay command added (Command-R on Mac, Control-R on Windows/Linux)
-Bug Fixes:
-    eliminated NullPointerExceptions in focus traversal
+Linux version released
+Replay command added (Command-R on Mac, Control-R on Windows/Linux)
+Eliminated NullPointerExceptions in focus traversal

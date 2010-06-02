@@ -13,7 +13,7 @@ Oracle:
 1) Latency in event pipe when AbstractAction associated with JMenuItem
 http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6924234
 
-2) JMenuItems in GTK LAF have no borders
+2) JMenuItems in GTK LAF Clearlooks theme have no borders
 http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6925412
 
 3) GTK LAF gives --> resize cursor over JSplitPane instead of <-->
