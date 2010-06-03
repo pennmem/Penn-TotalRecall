@@ -76,10 +76,12 @@ public class Start {
 		MyFrame.getInstance().setFocusTraversalPolicy(new MyFocusTraversalPolicy());
 		MyMenu.updateActions(); //set up all action states before frame becomes visible but after all components tied to the actions are made		
 		restoreFramePositionAndLayout();
-		MyFrame.getInstance().setVisible(true);
-		new CheckUpdatesAction(false).actionPerformed(new ActionEvent(MyFrame.getInstance(), ActionEvent.ACTION_PERFORMED, null));
-		checkIfFirstRun();
-		if(SysInfo.sys.isWindowsAny) {
+		MyFrame.getInstance().setVisible(true);				
+		if(DEV_MODE == false) {
+			new CheckUpdatesAction(false).actionPerformed(new ActionEvent(MyFrame.getInstance(), ActionEvent.ACTION_PERFORMED, null));
+			checkIfFirstRun();
+		}
+		if(SysInfo.sys.isWindowsAny && DEV_MODE == false) {
 			loadAndCheckCalibration();
 		}
 	}
