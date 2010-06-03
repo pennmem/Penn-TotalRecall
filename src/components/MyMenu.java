@@ -152,6 +152,7 @@ public class MyMenu extends JMenuBar {
 		
 		JMenuItem jmiStop = new JMenuItem(
 				new StopAction());
+		jmiStop.setName("Go to Start");
 		JMenuItem jmiReplay = new JMenuItem(
 				new ReplayLast200MillisAction());
 		JMenuItem jmiLastPos = new JMenuItem(
