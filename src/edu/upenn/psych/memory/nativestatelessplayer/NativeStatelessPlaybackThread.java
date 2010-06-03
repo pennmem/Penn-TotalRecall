@@ -15,6 +15,7 @@
 package edu.upenn.psych.memory.nativestatelessplayer;
 
 import info.Constants;
+import info.SysInfo;
 
 import java.io.File;
 import java.util.List;
@@ -111,7 +112,13 @@ public class NativeStatelessPlaybackThread extends Thread {
 						}
 					}
 				}
-				if(myLib.playbackInProgress() == false) {
+				if(myLib.playbackInProgress() == false && SysInfo.sys.isWindowsAny) {
+					try {
+						Thread.sleep(150);
+					}
+					catch(InterruptedException e) {
+						e.printStackTrace();
+					}
 					break;
 				}
 				try {
