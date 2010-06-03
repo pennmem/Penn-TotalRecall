@@ -95,7 +95,7 @@ public class NativeStatelessPlaybackThread extends Thread {
 				long curFrame = framesElapsed + startFrame;				
 				if(curFrame >= endFrame) {
 					if(curFrame > Integer.MAX_VALUE) {
-						//this may be JNA number representation related, they warn not to use Java long
+						//apparently this is a result of FMOD code currently not self-stopping, Issue 11
 						System.err.println("applying FMOD last-frame-is-huge workaround");
 						curFrame = endFrame;
 					}
