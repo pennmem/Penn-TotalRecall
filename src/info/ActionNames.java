@@ -145,7 +145,7 @@ public class ActionNames {
 					new ActionIdentification("Play/Pause", null));
 			generalMap.put(
 					StopAction.class, 
-					new ActionIdentification("Stop", null));
+					new ActionIdentification("Go to Start", null));
 			generalMap.put(
 					ReplayLast200MillisAction.class, 
 					new ActionIdentification("Replay Last 200 ms", null));
