@@ -26,7 +26,6 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import util.GiveMessage;
 import behaviors.singleact.CheckUpdatesAction;
 
 import components.MacOSXCustomizer;
@@ -79,7 +78,6 @@ public class Start {
 		MyFrame.getInstance().setVisible(true);				
 		if(DEV_MODE == false) {
 			new CheckUpdatesAction(false).actionPerformed(new ActionEvent(MyFrame.getInstance(), ActionEvent.ACTION_PERFORMED, null));
-			checkIfFirstRun();
 		}
 	}
 
@@ -121,21 +119,6 @@ public class Start {
 		int halfway = UserPrefs.prefs.getInt(UserPrefs.windowHeight, UserPrefs.defaultWindowHeight)/2;
 		dividerLocation = UserPrefs.prefs.getInt(UserPrefs.dividerLocation, halfway);
 		MySplitPane.getInstance().setDividerLocation(dividerLocation);	
-	}
-	
-	/**
-	 * Presents user with first-run notification, if appropriate.
-	 */
-	private void checkIfFirstRun() {
-		boolean firstRun = UserPrefs.prefs.getBoolean(UserPrefs.isFirstRun, true);
-		if(firstRun) {
-			String message = "Welcome to " + Constants.programName + " " + Constants.programVersion + "!" + "\n\n" +
-			"Tutorials and help are available at " + Constants.tutorialSite + ".\n\n" +
-			"Please report any bugs you encounter to " + Constants.maintainerEmail + ".";
-			
-			GiveMessage.infoMessage(message);
-		}
-		UserPrefs.prefs.putBoolean(UserPrefs.isFirstRun, false);
 	}
 	
 	public static boolean developerMode() {
