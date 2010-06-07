@@ -23,7 +23,6 @@ import behaviors.multiact.SeekAction;
 import behaviors.multiact.ToggleAnnotationsAction;
 import behaviors.multiact.ZoomAction;
 import behaviors.singleact.AboutAction;
-import behaviors.singleact.CalibrateAction;
 import behaviors.singleact.CheckUpdatesAction;
 import behaviors.singleact.ContinueAnnotatingAction;
 import behaviors.singleact.DeleteAnnotationAction;
@@ -161,9 +160,6 @@ public class ActionNames {
 			generalMap.put(
 					ReplayLastPositionAction.class,
 					new ActionIdentification("Replay", null));
-			generalMap.put(
-					CalibrateAction.class,
-					new ActionIdentification("Calibrate...", null));
 		}
 		return generalMap;
 	}

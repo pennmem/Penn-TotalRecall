@@ -35,7 +35,6 @@ import behaviors.multiact.SeekAction;
 import behaviors.multiact.ToggleAnnotationsAction;
 import behaviors.multiact.ZoomAction;
 import behaviors.singleact.AboutAction;
-import behaviors.singleact.CalibrateAction;
 import behaviors.singleact.CheckUpdatesAction;
 import behaviors.singleact.DoneAction;
 import behaviors.singleact.ExitAction;
@@ -186,11 +185,6 @@ public class MyMenu extends JMenuBar {
 		jmSeek.add(jmiLast200MoveRight);
 		jmSeek.add(jmiLast200MoveLeft);
 
-		if(SysInfo.sys.isWindowsAny) {
-			JMenuItem jmiCalibrate = new JMenuItem(new CalibrateAction());
-			jmAudio.add(jmiCalibrate);
-			jmAudio.addSeparator();
-		}
 		jmAudio.add(jmiPlayPause);
 		jmAudio.add(jmiStop);
 		jmAudio.add(jmiReplay);

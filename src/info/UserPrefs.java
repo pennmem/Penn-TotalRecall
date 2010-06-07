@@ -214,9 +214,6 @@ public class UserPrefs {
 	public static final String useEmacs = "USE_EMACS";
 	public static final boolean defaultUseEmacs = false;
 	
-	public static final String audioOffsetFrames = "AUDIO_OFFSET_FRAMES";
-	public static final int defaultAudioOffsetFrames = 0;
-	
 	
 	/**
 	 * Private constructor to prevent instantiation.

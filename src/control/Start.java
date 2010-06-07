@@ -81,9 +81,6 @@ public class Start {
 			new CheckUpdatesAction(false).actionPerformed(new ActionEvent(MyFrame.getInstance(), ActionEvent.ACTION_PERFORMED, null));
 			checkIfFirstRun();
 		}
-		if(SysInfo.sys.isWindowsAny && DEV_MODE == false) {
-			loadAndCheckCalibration();
-		}
 	}
 
 	/**
@@ -124,16 +121,6 @@ public class Start {
 		int halfway = UserPrefs.prefs.getInt(UserPrefs.windowHeight, UserPrefs.defaultWindowHeight)/2;
 		dividerLocation = UserPrefs.prefs.getInt(UserPrefs.dividerLocation, halfway);
 		MySplitPane.getInstance().setDividerLocation(dividerLocation);	
-	}
-
-	private void loadAndCheckCalibration() {
-		int offset = UserPrefs.prefs.getInt(UserPrefs.audioOffsetFrames, UserPrefs.defaultAudioOffsetFrames);
-		CurAudio.setOffsetFrames(Math.max(0, offset));
-		if(offset < 1) {
-			String line1 = "Please calibrate your audio system by going to Controls --> Calibrate.";
-			String line2 = "Failing to do so may result in substantially inaccurate annotations on Windows.";
-			GiveMessage.infoMessage(line1 + "\n" + line2);
-		}		
 	}
 	
 	/**

@@ -59,7 +59,6 @@ public class CurAudio {
 	private static long chunkSize;
 
 	private static int desiredLoudness = 100;
-	private static int offset = 0;
 
 	private static long framePosition;
 	private static long[] lastFrameArray;
@@ -477,13 +476,5 @@ public class CurAudio {
 	 */
 	public static int getDesiredLoudness() {
 		return desiredLoudness;
-	}
-
-	public static void setOffsetFrames(int i) {
-		offset = i;
-	}
-	
-	public static int getOffsetFrames() {
-		return offset;
 	}
 }
