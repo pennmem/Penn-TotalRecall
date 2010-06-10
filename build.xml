@@ -246,6 +246,9 @@
 
 	<!-- Make a Windows installer using NSIS. -->
 	<target name="package_win_installer" depends="package_win_exe, compile_native" description="make a Windows installer for the exe wrapper -- requires NSIS">
+	    <echo message="UNZIPPING nsis.zip"/>
+        <unzip src="${nsis_zip}" dest="${tmp}"/>
+        <property name="nsis_root" value="${tmp}/nsis"/>
 	    <taskdef name="nsis" 
 	    	classname="net.sf.nsisant.Task"
 	    	classpathref="buildtool_jars"/>
