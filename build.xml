@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- 
-	Apache Ant build file for PennTotalRecall
-	
-	
+    Apache Ant build file for PennTotalRecall
+    
+    
     Compilation:
-	    Java - Any system with JDK 6+ should be able to create the runnable jar file (package_jar) which makes the program GUI sans audio system.
+        Java - Any system with JDK 6+ should be able to create the runnable jar file (package_jar) which makes the program GUI sans audio system.
                If you get compiler errors about the Desktop class it's because Ant is trying to compile against the Java 5 libraries.
         Native - If you have a supported C-compiler installed (Linux: gcc/make and libc6 for 32 and 64, Mac: standard XCode tools, Windows: Visual C++)
                  you can also compile the audio system and move those libraries to your appropriate system path (install_native).
                  That is all you need to run the full program.
-		         Launch the program with java -jar dist/PennTotalRecall.jar
-	
-		
+                 Launch the program with java -jar dist/PennTotalRecall.jar
+    
+        
     Packaging:
-        Source -  package_src
-		Windows - package_win_exe (requires Launch4j installed) then package_win_installer (requires NSIS installed)
-		Mac - package_mac_app followed by package_mac_dmg (requires standard XCode dev tools)
-		Linux - package_linux_deb
+        Source - package_src
+        Windows - package_win_exe (requires Launch4j installed) then package_win_installer (requires NSIS installed)
+        Mac - package_mac_app followed by package_mac_dmg (requires standard XCode dev tools)
+        Linux - package_linux_deb
 
-		
+        
     NOTE: Any locations where this script expects files should be declared as properties in ant.properties file.
           The only exception is the top-level dirs in the project which are declared as name/location properties so Ant
           can figure out their absolute paths.
-	NOTE: All useful output is placed in dist. Intermediate files are placed in tmp, except Java class files which go in classes.
-	NOTE: Cross-compiling/packaging between operating systems is not supported. E.g., to build for Windows you must be on Windows.
-	
-		
-	Author: Yuvi Masory, Apurva Jatakia
+    NOTE: All useful output is placed in dist. Intermediate files are placed in tmp, except Java class files which go in classes.
+    NOTE: Cross-compiling/packaging between operating systems is not supported. E.g., to build for Windows you must be on Windows.
+    
+        
+    Author: Yuvi Masory, Apurva Jatakia
 
 
     This build file has been tested on:
@@ -38,7 +38,7 @@
 
 
 <project default="package_jar" name="Penn TotalRecall -- build Java, native, and create installers" basedir=".">
-	
+    
   <!-- Create aliases for absolute paths of project directories. -->
   <property name="dev" location="dev"/>
   <property name="deploy" location="deploy"/>
@@ -49,7 +49,7 @@
   <property name="resources" location="resources"/>
   <property name="program_files" location="C:/Program Files (x86)"/>
   
-  <!-- Create aliases for absolute paths of directories created by ant. -->	
+  <!-- Create aliases for absolute paths of directories created by ant. --> 
   <property name="classes" location="classes"/>
   <property name="dist" location="dist"/>
   <property name="tmp" location="tmp"/>
@@ -63,10 +63,10 @@
   
   <!-- Detect OS -->
   <condition property="isWindows">
-	<os family="windows" />
+    <os family="windows" />
   </condition>
   <condition property="isUnix">
-	<os family="unix" />
+    <os family="unix" />
   </condition>
   
   
@@ -81,18 +81,18 @@
     <fail unless="isJava6" message="JAVA 6 REQUIRED -- SET JAVA_HOME ENV VARIABLE TO A JAVA 6 INSTALLATION"/>
     
     <echo message="SETTING TIME STAMP"/>
-  	<tstamp/>
+    <tstamp/>
     
     <echo message="CREATING DIRECTORIES USED BY OTHER TARGETS"/>
-	<mkdir dir="${classes}"/>
-	<mkdir dir="${dist}"/>
-	<mkdir dir="${tmp}"/>
+    <mkdir dir="${classes}"/>
+    <mkdir dir="${dist}"/>
+    <mkdir dir="${tmp}"/>
   </target>
   
   <!-- Delete the ${classes}, ${dist}, and ${tmp} directory trees. -->
   <target name="clean" description="remove everything created by ant">
     <echo message="REMOVING EVERYTHING CREATED BY ANT"/>
-   	<delete dir="${classes}" quiet="true" failonerror="false"/>
+    <delete dir="${classes}" quiet="true" failonerror="false"/>
     <delete dir="${dist}" quiet="true" failonerror="false"/>
     <delete dir="${tmp}" quiet="true" failonerror="false"/>
   </target>
@@ -106,7 +106,7 @@
   
   <!-- SOURCE RELEASE -->
   
-  <!-- Create jar with all project code in it. -->  	
+  <!-- Create jar with all project code in it. -->      
   <target name="package_src" depends="-init" description="create a zip file containing all project files, appropriate for source release">
     <echo message="CREATING ZIP WITH ENTIRE PROJECT IN IT"/>
     <!-- necessary to avoid the problem that a zip file can't contain itself -->
@@ -127,21 +127,21 @@
   <!-- Compile Java source. -->
   <target name="compile_java" depends="-init" description="compile the Java component of the program">
     <echo message="COMPILING JAVA SOURCE CODE"/>
-	<javac target="1.5" srcdir="${src}" destdir="${classes}">
+    <javac target="1.5" srcdir="${src}" destdir="${classes}">
       <classpath>
         <fileset dir="${lib}">
           <include name="*.jar" />
         </fileset>
       </classpath>
-	</javac>
+    </javac>
   </target>
   
   
-  <!-- Create runnable jar file (will lack native audio system). -->  	
+  <!-- Create runnable jar file (will lack native audio system). -->    
   <target name="package_jar" depends="compile_java" description="create a runnable jar of the Java component of the program">
     <echo message="FLATTENING JAR DEPENDENCIES"/>
     <property name="flat_jars" location="${tmp}/flattened_dependencies"/>
-   	<delete dir="${flat_jars}" quiet="true" failonerror="false"/>
+    <delete dir="${flat_jars}" quiet="true" failonerror="false"/>
     <mkdir dir="${flat_jars}"/>
     
     <unzip dest="${flat_jars}">
@@ -151,19 +151,19 @@
     </unzip>
     
     <echo message="CREATING RUNNABLE JAR OF JAVA PORTION OF PROGRAM"/>
-	<jar destfile="${run_jar_target}" filesetmanifest="skip">
-	  <manifest>
-	    <attribute name="Main-Class" value="${main_class}"/>
-	    <attribute name="Class-Path" value="."/>
+    <jar destfile="${run_jar_target}" filesetmanifest="skip">
+      <manifest>
+        <attribute name="Main-Class" value="${main_class}"/>
+        <attribute name="Class-Path" value="."/>
         <attribute name="Built-By" value="${user.name}"/>
         <attribute name="Implementation-Vendor" value="${org_name}"/>
         <attribute name="Implementation-Title" value="${program_proper_name}"/>
-	  </manifest>
+      </manifest>
       <fileset dir="${flat_jars}"/>
-	  <fileset dir="${classes}"/>
-	  <fileset dir="${resources}"/>
-	</jar>
-   	<delete dir="${flat_jars}" quiet="true" failonerror="false"/>
+      <fileset dir="${classes}"/>
+      <fileset dir="${resources}"/>
+    </jar>
+    <delete dir="${flat_jars}" quiet="true" failonerror="false"/>
   </target>
   
   
@@ -180,20 +180,20 @@
   <target name="compile_native" depends="-init" description="compile native audio system -- requires gcc/make or msvc">
     <echo message="CALLING NATIVE make OR vcbuild TO COMPILE AUDIO SYSTEM"/>
     <exec dir="${fmod_posix_build}" executable="make" os="Linux | Mac OS X" failonerror="true"/>
-    <exec executable="vcbuild" osfamily="windows" failonerror="true">	
+    <exec executable="vcbuild" osfamily="windows" failonerror="true">   
       <arg value="${fmod_windows_buildfile}"/>
       <arg value="$all"/>
     </exec>
-	
-	<echo message="CLEANING UP INTERMEDIATE vcbuild FILES" />
-	<delete dir="${tmp}/vc_libbuild_tmp" failonerror="false"/>
-	<delete dir="${tmp}/vc_libbuild64_tmp" failonerror="false"/>
-	<delete file="${tmp}/penntotalrecall.exp" failonerror="false"/>
-	<delete file="${tmp}/penntotalrecall.lib" failonerror="false"/>
-	<delete file="${tmp}/penntotalrecall.pdb" failonerror="false"/>
-	<delete file="${tmp}/penntotalrecall64.exp" failonerror="false"/>
-	<delete file="${tmp}/penntotalrecall64.lib" failonerror="false"/>
-	<delete file="${tmp}/penntotalrecall64.pdb" failonerror="false"/>
+    
+    <echo message="CLEANING UP INTERMEDIATE vcbuild FILES" />
+    <delete dir="${tmp}/vc_libbuild_tmp" failonerror="false"/>
+    <delete dir="${tmp}/vc_libbuild64_tmp" failonerror="false"/>
+    <delete file="${tmp}/penntotalrecall.exp" failonerror="false"/>
+    <delete file="${tmp}/penntotalrecall.lib" failonerror="false"/>
+    <delete file="${tmp}/penntotalrecall.pdb" failonerror="false"/>
+    <delete file="${tmp}/penntotalrecall64.exp" failonerror="false"/>
+    <delete file="${tmp}/penntotalrecall64.lib" failonerror="false"/>
+    <delete file="${tmp}/penntotalrecall64.pdb" failonerror="false"/>
   </target>
   
   <!-- Move native libraries to system paths. -->
@@ -207,15 +207,15 @@
   </target>
   
   <target name="-install_native_windows" if="isWindows">
-	<echo message="MOVING DLLs TO System32 AND SysWOW64"/>
-	<copy file="${native}/fmod/lib/win64/fmodex64.dll" todir="C:/Windows/System32/"/>
-	<copy file="${tmp}/penntotalrecall64.dll" todir="C:/Windows/System32/"/>
-	<copy file="${native}/fmod/lib/win32/fmodex.dll" todir="C:/Windows/System32/"/>
-	<copy file="${tmp}/penntotalrecall.dll" todir="C:/Windows/System32/"/>
-	<!-- this double copying is very regrettably necessary as some programs are creating SysWoW64 on 32-bit machines
-		 and there's no reliable way to check for 64-bit architecture other than Hotspot's nonstandard sun.arch.data.model -->
-	<copy file="${native}/fmod/lib/win32/fmodex.dll" todir="C:/Windows/SysWOW64/" failonerror="false"/>
-	<copy file="${tmp}/penntotalrecall.dll" todir="C:/Windows/SysWOW64/" failonerror="false"/>
+    <echo message="MOVING DLLs TO System32 AND SysWOW64"/>
+    <copy file="${native}/fmod/lib/win64/fmodex64.dll" todir="C:/Windows/System32/"/>
+    <copy file="${tmp}/penntotalrecall64.dll" todir="C:/Windows/System32/"/>
+    <copy file="${native}/fmod/lib/win32/fmodex.dll" todir="C:/Windows/System32/"/>
+    <copy file="${tmp}/penntotalrecall.dll" todir="C:/Windows/System32/"/>
+    <!-- this double copying is very regrettably necessary as some programs are creating SysWoW64 on 32-bit machines
+         and there's no reliable way to check for 64-bit architecture other than Hotspot's nonstandard sun.arch.data.model -->
+    <copy file="${native}/fmod/lib/win32/fmodex.dll" todir="C:/Windows/SysWOW64/" failonerror="false"/>
+    <copy file="${tmp}/penntotalrecall.dll" todir="C:/Windows/SysWOW64/" failonerror="false"/>
   </target>
   
   
@@ -232,27 +232,27 @@
   
   <!-- Make a Windows .exe wrapper using Launch4j. -->
   <target name="package_win_exe" depends="package_jar" description="make a exe wrapper for the runnable jar file -- requires launch4j">
-	<echo message="UNZIPPING l4j.zip (WORKAROUND)"/>
-	<unzip src="${l4j_zip}" dest="${tmp}"/>
-	<property name="l4j_root" value="${tmp}/l4j"/>
-	<echo message="CREATING .exe WRAPPER USING Launch4j"/>
-	<taskdef name="launch4j"
-	         classname="net.sf.launch4j.ant.Launch4jTask"
-	         classpath="${l4j_root}/launch4j.jar:${l4j_root}/lib/xstream.jar"/>
-	<launch4j configFile="${deploy}/windows/launch4j_config.xml"/>
-	<echo message="DELETING UNZIPPED l4j.zip (DOES NOT FULLY WORK)"/>
-	<delete dir="${l4j_root}" failonerror="false"/>
+    <echo message="UNZIPPING l4j.zip (WORKAROUND)"/>
+    <unzip src="${l4j_zip}" dest="${tmp}"/>
+    <property name="l4j_root" value="${tmp}/l4j"/>
+    <echo message="CREATING .exe WRAPPER USING Launch4j"/>
+    <taskdef name="launch4j"
+             classname="net.sf.launch4j.ant.Launch4jTask"
+             classpath="${l4j_root}/launch4j.jar:${l4j_root}/lib/xstream.jar"/>
+    <launch4j configFile="${deploy}/windows/launch4j_config.xml"/>
+    <echo message="DELETING UNZIPPED l4j.zip (DOES NOT FULLY WORK)"/>
+    <delete dir="${l4j_root}" failonerror="false"/>
   </target>
   
   <!-- Make a Windows installer using NSIS. -->
   <target name="package_win_installer" depends="package_win_exe, compile_native" description="make a Windows installer for the exe wrapper -- requires NSIS">
-	<echo message="UNZIPPING nsis.zip"/>
+    <echo message="UNZIPPING nsis.zip"/>
     <unzip src="${nsis_zip}" dest="${tmp}"/>
     <property name="nsis_root" value="${tmp}/nsis"/>
-	<taskdef name="nsis" 
-	    	 classname="net.sf.nsisant.Task"
-	    	 classpathref="buildtool_jars"/>
-	<nsis script="${nsis_script}" path="${nsis_root}"/>
+    <taskdef name="nsis" 
+             classname="net.sf.nsisant.Task"
+             classpathref="buildtool_jars"/>
+    <nsis script="${nsis_script}" path="${nsis_root}"/>
   </target>
   
   
@@ -270,35 +270,35 @@
   <target name="package_linux_deb" depends="package_jar, compile_native" description="make Debian deb package for program">
     <taskdef resource="ant_deb_task.properties" classpathref="buildtool_jars"/>
     <property name="debtmp" value="${tmp}/deb"/>
-	<mkdir dir="${debtmp}"/>
-	<desktopentry toFile="${debtmp}/${program_extensionless_filename}.desktop" name="${program_proper_name}" exec="/usr/bin/${unix_name}" icon="/usr/share/${unix_name}/headphones16.png" categories="Utility;Java"/>
+    <mkdir dir="${debtmp}"/>
+    <desktopentry toFile="${debtmp}/${program_extensionless_filename}.desktop" name="${program_proper_name}" exec="/usr/bin/${unix_name}" icon="/usr/share/${unix_name}/headphones16.png" categories="Utility;Java"/>
     
-	<copy file="${run_jar_target}" tofile="${debtmp}/${program_extensionless_filename}.jar"/>
-	<copy file="${headphones16}" tofile="${debtmp}/headphones16.png"/>
-	<copy file="${linux_fmod_32_dir}/${linux_fmod_32_name}" todir="${debtmp}"/>
-	<copy file="${linux_fmod_64_dir}/${linux_fmod_64_name}" todir="${debtmp}"/>
-	<copy file="${tmp}/${linux_libptr_32_name}" todir="${debtmp}"/>
-	<copy file="${tmp}/${linux_libptr_64_name}" todir="${debtmp}"/>
+    <copy file="${run_jar_target}" tofile="${debtmp}/${program_extensionless_filename}.jar"/>
+    <copy file="${headphones16}" tofile="${debtmp}/headphones16.png"/>
+    <copy file="${linux_fmod_32_dir}/${linux_fmod_32_name}" todir="${debtmp}"/>
+    <copy file="${linux_fmod_64_dir}/${linux_fmod_64_name}" todir="${debtmp}"/>
+    <copy file="${tmp}/${linux_libptr_32_name}" todir="${debtmp}"/>
+    <copy file="${tmp}/${linux_libptr_64_name}" todir="${debtmp}"/>
     
-	<deb todir="${dist}" package="${unix_name}" section="sound" depends="${debian_depends}" homepage="${homepage}">
-	  <version upstream="${version}" />
-	  <maintainer email="${maintainer_email}" name="${maintainer_name}" />
-	  <description synopsis="an easy-to-use tool for quickly annotating audio files"/>
-	  <tarfileset dir="${debtmp}" prefix="opt/${unix_name}">
-		<include name="${program_extensionless_filename}.jar" />
-		<include name="headphones16.png"/>
-	  </tarfileset>
-	  <tarfileset file="${linux_start_script}" prefix="usr/bin" filemode="755" />
-	  <tarfileset dir="${debtmp}" prefix="opt/${unix_name}/lib">
-		<include name="${linux_fmod_32_name}"/>
-		<include name="${linux_fmod_64_name}"/>
+    <deb todir="${dist}" package="${unix_name}" section="sound" depends="${debian_depends}" homepage="${homepage}">
+      <version upstream="${version}" />
+      <maintainer email="${maintainer_email}" name="${maintainer_name}" />
+      <description synopsis="an easy-to-use tool for quickly annotating audio files"/>
+      <tarfileset dir="${debtmp}" prefix="opt/${unix_name}">
+        <include name="${program_extensionless_filename}.jar" />
+        <include name="headphones16.png"/>
+      </tarfileset>
+      <tarfileset file="${linux_start_script}" prefix="usr/bin" filemode="755" />
+      <tarfileset dir="${debtmp}" prefix="opt/${unix_name}/lib">
+        <include name="${linux_fmod_32_name}"/>
+        <include name="${linux_fmod_64_name}"/>
         <include name="${linux_libptr_32_name}"/>
         <include name="${linux_libptr_64_name}"/>
-	  </tarfileset>
-	  <tarfileset file="${headphones16}" prefix="/usr/share/${unix_name}"/>
-	  <tarfileset file="${debtmp}/${program_extensionless_filename}.desktop" prefix="usr/share/applications" />
-	</deb>
-	<delete dir="${debtmp}" failonerror="false"/>
+      </tarfileset>
+      <tarfileset file="${headphones16}" prefix="/usr/share/${unix_name}"/>
+      <tarfileset file="${debtmp}/${program_extensionless_filename}.desktop" prefix="usr/share/applications" />
+    </deb>
+    <delete dir="${debtmp}" failonerror="false"/>
   </target>
   
   
