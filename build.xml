@@ -253,6 +253,8 @@
              classname="net.sf.nsisant.Task"
              classpathref="buildtool_jars"/>
     <nsis script="${nsis_script}" path="${nsis_root}"/>
+    <echo message="DELETING UNZIPPED nsis.zip"/>
+    <delete dir="${nsis_root}" failonerror="false"/>
   </target>
   
   
