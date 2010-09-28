@@ -15,6 +15,9 @@
 package behaviors.multiact;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.Timer;
 
 import util.GiveMessage;
 
@@ -37,6 +40,7 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 	 * Defines the toggling direction of a <code>ToggleAnnotationAction</code> instance.
 	 */
 	public static enum Direction {FORWARD, BACKWARD};
+	
 
 	private Direction myDir;
 
@@ -68,12 +72,32 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 			System.err.println("It should not have been possible to call " + getClass().getName() + ". Could not find matching annotation");
 		}
 		else {
-			long approxFrame = CurAudio.getMaster().millisToFrames(ann.getTime());
+			final long approxFrame = CurAudio.getMaster().millisToFrames(ann.getTime());
+			final long curFrame = CurAudio.getAudioProgress();
+			System.out.println("Approx frame: " + approxFrame);
+			System.out.println("Current Frame"+ curFrame);
 			if(approxFrame < 0 || approxFrame > CurAudio.getMaster().durationInFrames() - 1) {
 				GiveMessage.errorMessage("The annotation I am toggling to isn't in range.\nPlease check annotation file for errors."); 
 				return;
 			}
-			CurAudio.setAudioProgressAndUpdateActions(approxFrame);
+			 
+			 final Timer timer = new Timer(30, new ActionListener() {
+				 
+				 	private long panFrame = curFrame;
+				 	private long endFrame = approxFrame;
+				 	
+		            public void actionPerformed(ActionEvent evt) {
+		            	if (panFrame >= endFrame) {
+		            		return;
+		            	}
+		            	CurAudio.setAudioProgressWithoutUpdatingActions(panFrame);
+		            	panFrame += 3000;
+		            }
+		        }
+			 );
+			 timer.start();				
+				
+//			CurAudio.setAudioProgressAndUpdateActions(approxFrame);
 			CurAudio.getPlayer().queuePlayAt(approxFrame);
 		}
 		MyFrame.getInstance().requestFocusInWindow();
