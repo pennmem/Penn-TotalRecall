@@ -36,6 +36,10 @@ import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
  * @author Yuvi Masory
  */
 public class ToggleAnnotationsAction extends IdentifiedMultiAction {
+	
+	//This status indicates if the Toggle action has been completed
+	int status =0;
+	
 	/**
 	 * Defines the toggling direction of a <code>ToggleAnnotationAction</code> instance.
 	 */
@@ -67,6 +71,10 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 	 * @param e The <code>ActionEvent</code> provided by the trigger
 	 */
 	public void actionPerformed(ActionEvent e) {
+		//Reset Status to 0 
+		status =0;
+	
+		
 		Annotation ann = findAnnotation(myDir, CurAudio.getMaster().framesToMillis(CurAudio.getAudioProgress()));
 		if(ann == null) {
 			System.err.println("It should not have been possible to call " + getClass().getName() + ". Could not find matching annotation");
@@ -74,35 +82,61 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 		else {
 			final long approxFrame = CurAudio.getMaster().millisToFrames(ann.getTime());
 			final long curFrame = CurAudio.getAudioProgress();
-			System.out.println("Approx frame: " + approxFrame);
-			System.out.println("Current Frame"+ curFrame);
 			if(approxFrame < 0 || approxFrame > CurAudio.getMaster().durationInFrames() - 1) {
 				GiveMessage.errorMessage("The annotation I am toggling to isn't in range.\nPlease check annotation file for errors."); 
 				return;
 			}
-			 
-			 final Timer timer = new Timer(30, new ActionListener() {
-				 
+			
+				Timer timer;
+			 	timer = new Timer(10, new panListener(curFrame , approxFrame , myDir)); 
+			 	
+			 	
+			 	/*{
 				 	private long panFrame = curFrame;
 				 	private long endFrame = approxFrame;
-				 	
-		            public void actionPerformed(ActionEvent evt) {
-		            	if (panFrame >= endFrame) {
-		            		return;
+				 	public void actionPerformed(ActionEvent evt) {
+
+				 		if(myDir == Direction.FORWARD){
+				 			if (panFrame >= endFrame) {
+				 				status = 1;
+				 				//CurAudio.setAudioProgressAndUpdateActions(approxFrame);
+				 				return;
+				 			}
+				 			CurAudio.setAudioProgressWithoutUpdatingActions(panFrame);
+				 			panFrame += 4000;
 		            	}
-		            	CurAudio.setAudioProgressWithoutUpdatingActions(panFrame);
-		            	panFrame += 3000;
-		            }
-		        }
+				 	else if(myDir == Direction.BACKWARD){
+			 			if (panFrame <= endFrame) {
+			 				status = 1;
+			 				//CurAudio.setAudioProgressAndUpdateActions(endFrame);
+			 				return;
+			 			}
+			 			CurAudio.setAudioProgressWithoutUpdatingActions(panFrame);
+			 			panFrame -= 4000;
+	            	}
+			 	}
+			 		 
+			 }
 			 );
-			 timer.start();				
+*/		
+			
+			 timer.start();
+			 //Control needs to beak to here 
+			 
+			 
+			 
+			 
+			 
+			 
+			 
+			
 				
-//			CurAudio.setAudioProgressAndUpdateActions(approxFrame);
-			CurAudio.getPlayer().queuePlayAt(approxFrame);
+
 		}
 		MyFrame.getInstance().requestFocusInWindow();
 	}
-
+	
+	
 	/**
 	 * A forward (backward) <code>ToggleAnnotationsAction</code> should be enabled only when audio is open, not playing, and when there is an annotation following (preceding) the current position.
 	 */
@@ -153,4 +187,43 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 		}
 		return null;
 	}
+
+	
+	public class panListener implements ActionListener{
+		private long panFrame , endFrame ;
+		Timer localTimer;
+		Direction localDir;
+		
+		protected panListener(long approxFrame , long currentFrame , Direction dir ){
+			panFrame = currentFrame;
+			endFrame = approxFrame;
+			localTimer = this;
+			localDir = dir;
+		}
+		
+		public final void actionPerformed(ActionEvent evt) {
+	 		if(localDir == Direction.FORWARD){
+	 			if (panFrame >= endFrame) {
+	 				//CurAudio.setAudioProgressAndUpdateActions(approxFrame);
+	 				localTimer.stop();
+	 			}
+	 			CurAudio.setAudioProgressWithoutUpdatingActions(panFrame);
+	 			panFrame += 4000;
+        	}
+	 		else if(localDir == Direction.BACKWARD){
+	 			if (panFrame <= endFrame) {
+	 				//CurAudio.setAudioProgressAndUpdateActions(endFrame);
+	 				localTimer.stop();
+	 			}
+	 			CurAudio.setAudioProgressWithoutUpdatingActions(panFrame);
+	 			panFrame -= 4000;
+	 		}
+		}
+	
+	}
+
+	
+	
 }
+
+
