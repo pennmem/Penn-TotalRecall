@@ -93,7 +93,6 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 		 	public void actionPerformed(ActionEvent evt) {
 	 		if(myDir == Direction.FORWARD){
 	 			if (panFrame >= endFrame) {
-		 			status = 1;
 		 			timer.stop();
 		 			CurAudio.setAudioProgressAndUpdateActions(endFrame);
 		 			CurAudio.getPlayer().queuePlayAt(endFrame);
@@ -104,7 +103,6 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 	            }
 		 	else if(myDir == Direction.BACKWARD){
 	 			if (panFrame <= endFrame) {
-	 				status = 1;
 	 				timer.stop();
 	 				CurAudio.setAudioProgressAndUpdateActions(endFrame);
 		 			CurAudio.getPlayer().queuePlayAt(endFrame);
@@ -171,43 +169,6 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 		}
 		return null;
 	}
-
-	
-	/*public class panListener implements ActionListener{
-		private long panFrame , endFrame ;
-		Timer localTimer;
-		Direction localDir;
-		
-		protected panListener(long approxFrame , long currentFrame , Direction dir ){
-			panFrame = currentFrame;
-			endFrame = approxFrame;
-			localTimer = this;
-			localDir = dir;
-		}
-		
-		public final void actionPerformed(ActionEvent evt) {
-	 		if(localDir == Direction.FORWARD){
-	 			if (panFrame >= endFrame) {
-	 				//CurAudio.setAudioProgressAndUpdateActions(approxFrame);
-	 				localTimer.stop();
-	 			}
-	 			CurAudio.setAudioProgressWithoutUpdatingActions(panFrame);
-	 			panFrame += 4000;
-        	}
-	 		else if(localDir == Direction.BACKWARD){
-	 			if (panFrame <= endFrame) {
-	 				//CurAudio.setAudioProgressAndUpdateActions(endFrame);
-	 				localTimer.stop();
-	 			}
-	 			CurAudio.setAudioProgressWithoutUpdatingActions(panFrame);
-	 			panFrame -= 4000;
-	 		}
-		}
-	
-	}*/
-
-	
-	
 }
 
 
