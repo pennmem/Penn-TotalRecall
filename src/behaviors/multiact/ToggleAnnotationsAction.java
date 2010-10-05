@@ -86,7 +86,6 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 				CurAudio.getPlayer().queuePlayAt(approxFrame);
 				return;
 			}else{
-				System.out.println("PAN");
 				final Timer	timer = new Timer(20,null); 
 				timer.addActionListener(new ActionListener() {
 					private long panFrame = curFrame;
