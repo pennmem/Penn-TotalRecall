@@ -37,8 +37,6 @@ import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
  */
 public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 	
-	//This status indicates if the Toggle action has been completed
-	int status =0;
 	
 	/**
 	 * Defines the toggling direction of a <code>ToggleAnnotationAction</code> instance.
@@ -71,10 +69,6 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 	 * @param e The <code>ActionEvent</code> provided by the trigger
 	 */
 	public void actionPerformed(ActionEvent e) {
-		//Reset Status to 0 
-		status =0;
-	
-		
 		Annotation ann = findAnnotation(myDir, CurAudio.getMaster().framesToMillis(CurAudio.getAudioProgress()));
 		if(ann == null) {
 			System.err.println("It should not have been possible to call " + getClass().getName() + ". Could not find matching annotation");
@@ -82,38 +76,36 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 		else {
 			final long approxFrame = CurAudio.getMaster().millisToFrames(ann.getTime());
 			final long curFrame = CurAudio.getAudioProgress();
+			final long maxProgress = CurAudio.getListener().getGreatestProgress();
 			if(approxFrame < 0 || approxFrame > CurAudio.getMaster().durationInFrames() - 1) {
 				GiveMessage.errorMessage("The annotation I am toggling to isn't in range.\nPlease check annotation file for errors."); 
 				return;
 			}
-			final Timer	timer = new Timer(20,null); 
-			timer.addActionListener(new ActionListener() {
-		 	private long panFrame = curFrame;
-		 	private long endFrame = approxFrame;
-		 	public void actionPerformed(ActionEvent evt) {
-	 		if(myDir == Direction.FORWARD){
-	 			if (panFrame >= endFrame) {
-		 			timer.stop();
-		 			CurAudio.setAudioProgressAndUpdateActions(endFrame);
-		 			CurAudio.getPlayer().queuePlayAt(endFrame);
-			 		return;
-			 		}
-			 	CurAudio.setAudioProgressWithoutUpdatingActions(panFrame);
-			 	panFrame += 4000;
-	            }
-		 	else if(myDir == Direction.BACKWARD){
-	 			if (panFrame <= endFrame) {
-	 				timer.stop();
-	 				CurAudio.setAudioProgressAndUpdateActions(endFrame);
-		 			CurAudio.getPlayer().queuePlayAt(endFrame);
-	 				return;
-	 			}
-	 			CurAudio.setAudioProgressWithoutUpdatingActions(panFrame);
-	 			panFrame -= 4000;
-           		}
-		 	}
-		});
-        timer.start();
+			if(approxFrame < maxProgress || curFrame < maxProgress){
+				CurAudio.setAudioProgressAndUpdateActions(approxFrame);
+				CurAudio.getPlayer().queuePlayAt(approxFrame);
+				return;
+			}else{
+				System.out.println("PAN");
+				final Timer	timer = new Timer(20,null); 
+				timer.addActionListener(new ActionListener() {
+					private long panFrame = curFrame;
+					public void actionPerformed(ActionEvent evt) {
+						if(myDir == Direction.FORWARD){
+							if (panFrame >= approxFrame) {
+								timer.stop();
+								CurAudio.setAudioProgressAndUpdateActions(approxFrame);
+								CurAudio.getPlayer().queuePlayAt(approxFrame);
+								CurAudio.getListener().offerGreatestProgress(approxFrame);
+								return;
+							}
+						CurAudio.setAudioProgressWithoutUpdatingActions(panFrame);
+						panFrame += 4000;
+						}
+					}
+				});
+			timer.start();
+			}
 		}
 		MyFrame.getInstance().requestFocusInWindow();
 	}
