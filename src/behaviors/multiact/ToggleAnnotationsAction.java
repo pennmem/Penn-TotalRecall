@@ -110,6 +110,7 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 	}
 	
 	
+	
 	/**
 	 * A forward (backward) <code>ToggleAnnotationsAction</code> should be enabled only when audio is open, not playing, and when there is an annotation following (preceding) the current position.
 	 */
