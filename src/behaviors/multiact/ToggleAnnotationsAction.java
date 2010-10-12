@@ -63,7 +63,7 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 	}
 
 	/**
-	 * Performs the toggling, moving the audio position to the next/previous annotation.
+	 * Performs the panning, moving the audio position to the next/previous annotation.
 	 * 
 	 * Afterward sends an update to all <code>UpdatingActions<code>.
 	 *
@@ -80,13 +80,16 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 			System.err.println("It should not have been possible to call " + getClass().getName() + ". Could not find matching annotation");
 		}
 		else {
+			
 			final long approxFrame = CurAudio.getMaster().millisToFrames(ann.getTime());
 			final long curFrame = CurAudio.getAudioProgress();
 			final long maxProgress = CurAudio.getListener().getGreatestProgress();
+			
 			if(approxFrame < 0 || approxFrame > CurAudio.getMaster().durationInFrames() - 1) {
 				GiveMessage.errorMessage("The annotation I am toggling to isn't in range.\nPlease check annotation file for errors."); 
 				return;
 			} 
+			
 			if(approxFrame < maxProgress || curFrame < maxProgress){
 				CurAudio.setAudioProgressAndUpdateActions(approxFrame);
 				CurAudio.getPlayer().queuePlayAt(approxFrame);
@@ -105,14 +108,10 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 					}
 					
 					public void keyPressed(KeyEvent e){
-						if(e.getKeyCode() == 27){
 							timer.stop();
 							MyMenu.updateActions();
 							CurAudio.getListener().offerGreatestProgress(curFrame);
-							//CurAudio.setAudioProgressAndUpdateActions(curFrame);
 							CurAudio.getPlayer().queuePlayAt(curFrame);
-						}
-						
 					}
 				});
 				 
