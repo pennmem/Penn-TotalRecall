@@ -16,12 +16,16 @@ package behaviors.multiact;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
+
 
 import javax.swing.Timer;
 
 import util.GiveMessage;
 
 import components.MyFrame;
+import components.MyMenu;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 
@@ -45,6 +49,7 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 	
 
 	private Direction myDir;
+	
 
 	/**
 	 * Create an action with the direction presets given by the provided <code>Enum</code>.
@@ -70,6 +75,7 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 	 */
 	public void actionPerformed(ActionEvent e) {
 		Annotation ann = findAnnotation(myDir, CurAudio.getMaster().framesToMillis(CurAudio.getAudioProgress()));
+		
 		if(ann == null) {
 			System.err.println("It should not have been possible to call " + getClass().getName() + ". Could not find matching annotation");
 		}
@@ -80,22 +86,47 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 			if(approxFrame < 0 || approxFrame > CurAudio.getMaster().durationInFrames() - 1) {
 				GiveMessage.errorMessage("The annotation I am toggling to isn't in range.\nPlease check annotation file for errors."); 
 				return;
-			}
+			} 
 			if(approxFrame < maxProgress || curFrame < maxProgress){
 				CurAudio.setAudioProgressAndUpdateActions(approxFrame);
 				CurAudio.getPlayer().queuePlayAt(approxFrame);
 				return;
 			}else{
-				final Timer	timer = new Timer(20,null); 
+				final Timer	timer = new Timer(20,null);
+				MyFrame frameCopy = MyFrame.getInstance();
+				frameCopy.addKeyListener(new KeyListener(){
+					
+					public void keyReleased(KeyEvent e){
+						
+					}
+					
+					public void keyTyped(KeyEvent e){
+						
+					}
+					
+					public void keyPressed(KeyEvent e){
+						if(e.getKeyCode() == 27){
+							timer.stop();
+							MyMenu.updateActions();
+							CurAudio.getListener().offerGreatestProgress(curFrame);
+							//CurAudio.setAudioProgressAndUpdateActions(curFrame);
+							CurAudio.getPlayer().queuePlayAt(curFrame);
+						}
+						
+					}
+				});
+				 
 				timer.addActionListener(new ActionListener() {
 					private long panFrame = curFrame;
 					public void actionPerformed(ActionEvent evt) {
+						MyMenu.disableActions();
 						if(myDir == Direction.FORWARD){
 							if (panFrame >= approxFrame) {
 								timer.stop();
 								CurAudio.setAudioProgressAndUpdateActions(approxFrame);
 								CurAudio.getPlayer().queuePlayAt(approxFrame);
 								CurAudio.getListener().offerGreatestProgress(approxFrame);
+								MyMenu.updateActions();
 								return;
 							}
 						CurAudio.setAudioProgressWithoutUpdatingActions(panFrame);
