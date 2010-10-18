@@ -112,6 +112,7 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 							MyMenu.updateActions();
 							CurAudio.getListener().offerGreatestProgress(curFrame);
 							CurAudio.getPlayer().queuePlayAt(curFrame);
+							return;
 					}
 				});
 				 
