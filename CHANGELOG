@@ -8,3 +8,7 @@ Windows version released
 Linux version released
 Replay command added (Command-R on Mac, Control-R on Windows/Linux)
 Eliminated NullPointerExceptions in focus traversal
+
+== Version 0.56 ==
+Update FMOD sound system to 4.32 branch, to un-break audio on
+Ubuntu 10.10.

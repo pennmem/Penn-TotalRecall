@@ -39,10 +39,10 @@ PLATFORM_CFLAGS = $(COMMON) -m32
 PLATFORM_CFLAGS64 = $(COMMON) -m64
 
 BUILD_NAME = libpenntotalrecall.so
-LIBRARIES = -lfmodex-4.28.09 -L../../lib/linux32/
+LIBRARIES = -lfmodex-4.32.03 -L../../lib/linux32/
 FMOD_LIB = ../../lib/linux32/libfmodex-*.so
 
-LIBRARIES64 = -lfmodex64-4.28.09 -L../../lib/linux64/
+LIBRARIES64 = -lfmodex64-4.32.03 -L../../lib/linux64/
 FMOD_LIB64 = ../../lib/linux64/libfmodex64-*.so
 BUILD_NAME64 = libpenntotalrecall64.so
 
