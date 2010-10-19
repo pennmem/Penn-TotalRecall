@@ -46,9 +46,10 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 	 * Defines the toggling direction of a <code>ToggleAnnotationAction</code> instance.
 	 */
 	public static enum Direction {FORWARD, BACKWARD};
-	
+	public static enum Action {PAN_BETWEEN, JUMP_BETWEEN, PAN_TO_FINISH}; 
 
 	private Direction myDir;
+	private Action myAction;
 	
 
 	/**
@@ -75,7 +76,9 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 	 */
 	public void actionPerformed(ActionEvent e) {
 		Annotation ann = findAnnotation(myDir, CurAudio.getMaster().framesToMillis(CurAudio.getAudioProgress()));
-		
+		// This could be used to check if the last annotation has been reached 
+		int numOfAnnotations = AnnotationDisplay.getNumAnnotations();
+				
 		if(ann == null) {
 			System.err.println("It should not have been possible to call " + getClass().getName() + ". Could not find matching annotation");
 		}
@@ -84,17 +87,36 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 			final long approxFrame = CurAudio.getMaster().millisToFrames(ann.getTime());
 			final long curFrame = CurAudio.getAudioProgress();
 			final long maxProgress = CurAudio.getListener().getGreatestProgress();
+			final long lastFrame = CurAudio.getMaster().durationInFrames();
 			
 			if(approxFrame < 0 || approxFrame > CurAudio.getMaster().durationInFrames() - 1) {
 				GiveMessage.errorMessage("The annotation I am toggling to isn't in range.\nPlease check annotation file for errors."); 
 				return;
 			} 
 			
-			if(approxFrame < maxProgress || curFrame < maxProgress){
+			if(maxProgress > approxFrame || curFrame < maxProgress){
+				// Action performed is jump from One annotation to another 
+					myAction = Action.JUMP_BETWEEN;
+			}else if(maxProgress < approxFrame){
+					// Action performed is pan from One annotation to another 
+					myAction = Action.PAN_BETWEEN;
+			}
+			
+			
+			// If current frame and Frame number of the Last Annotation are the same then you pan to finish 
+			if (curFrame ==CurAudio.getMaster().millisToFrames( 
+										AnnotationDisplay.getAnnotationsInOrder()
+														[numOfAnnotations -1].getTime())
+														){
+				//Not sure if this work , have not tested 
+				myAction = Action.PAN_TO_FINISH;
+			}
+			
+			if(myAction == Action.JUMP_BETWEEN){
 				CurAudio.setAudioProgressAndUpdateActions(approxFrame);
 				CurAudio.getPlayer().queuePlayAt(approxFrame);
 				return;
-			}else{
+			}else if(myAction == Action.PAN_BETWEEN){
 				final Timer	timer = new Timer(20,null);
 				MyFrame frameCopy = MyFrame.getInstance();
 				frameCopy.addKeyListener(new KeyListener(){
@@ -123,6 +145,8 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 						if(myDir == Direction.FORWARD){
 							if (panFrame >= approxFrame) {
 								timer.stop();
+								System.out.println(lastFrame);
+								System.out.println(curFrame);
 								CurAudio.setAudioProgressAndUpdateActions(approxFrame);
 								CurAudio.getPlayer().queuePlayAt(approxFrame);
 								CurAudio.getListener().offerGreatestProgress(approxFrame);
