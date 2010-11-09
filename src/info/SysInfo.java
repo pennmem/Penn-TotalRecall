@@ -65,7 +65,7 @@ public class SysInfo {
 	public final boolean preferDefaultJSMixerLine;
 	public final boolean useMetalLAF;
 	public final boolean mouseMode;
-	public final boolean forceListen;
+	public final boolean forceWatch;
 	public final boolean bandpassFilter;
 	public final boolean useAudioDataSmoothingForWaveform;
 	public final boolean useWaveformImageDataSmoothing;	
@@ -406,10 +406,10 @@ public class SysInfo {
 		//annotation optimizations
 		mouseMode = true;
 		if(Start.developerMode()) {
-			forceListen = false;
+			forceWatch = false;
 		}
 		else {
-			forceListen = true;
+			forceWatch = true;
 		}
 		
 		//pretty waveform 

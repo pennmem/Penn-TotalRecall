@@ -272,6 +272,12 @@ public class MyMenu extends JMenuBar {
 		}
 	}
 	
+	public static void disableActions() {
+		for(Object ia: allActions.toArray()) {
+			((UpdatingAction)ia).setEnabled(false);
+		}
+	}
+	
 	public static void updateSeekActions() {
 		for(UpdatingAction ia: allActions) {
 			if(ia instanceof SeekAction) {

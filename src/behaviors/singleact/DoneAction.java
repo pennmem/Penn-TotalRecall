@@ -77,7 +77,7 @@ public class DoneAction extends IdentifiedSingleAction {
 	@Override
 	public void update() {
 		if(CurAudio.audioOpen()) {
-			if(SysInfo.sys.forceListen) {
+			if(SysInfo.sys.forceWatch) {
 				if(CurAudio.getListener().getGreatestProgress() < CurAudio.getMaster().durationInFrames() - 1) {
 					setEnabled(false);
 					return;

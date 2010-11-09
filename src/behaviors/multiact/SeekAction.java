@@ -80,7 +80,7 @@ public class SeekAction extends IdentifiedMultiAction{
 		else if(naivePosition >= frameLength) {
 			finalPosition = frameLength - 1;
 		}
-		if(SysInfo.sys.forceListen) {
+		if(SysInfo.sys.forceWatch) {
 			finalPosition = Math.min(finalPosition, CurAudio.getListener().getGreatestProgress());
 		}
 
@@ -100,7 +100,7 @@ public class SeekAction extends IdentifiedMultiAction{
 			}
 			else {
 				boolean canSkipForward;
-				if(SysInfo.sys.forceListen) {
+				if(SysInfo.sys.forceWatch) {
 					canSkipForward = CurAudio.getAudioProgress() < CurAudio.getListener().getGreatestProgress();
 				}
 				else {
