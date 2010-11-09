@@ -90,7 +90,7 @@ public class CurAudio {
 		
 		if(file == null) {
 			MyFrame.getInstance().setTitle(GUIConstants.defaultFrameTitle);
-		} 
+		}
 		else {
 			curAudioFile = file;			
 
@@ -100,7 +100,7 @@ public class CurAudio {
 			try {
 				master = new AudioMaster(file);
 				success = true;
-			} 
+			}
 			catch(FileNotFoundException e) {
 				e.printStackTrace();
 				GiveMessage.errorMessage("Audio file not found!");
@@ -269,6 +269,7 @@ public class CurAudio {
 		playHistory.clear();
 		
 		AudioFileDisplay.getInstance().repaint();
+		AnnotationDisplay.getInstance().repaint();
 		MyFrame.getInstance().requestFocusInWindow();
 	}
 	
