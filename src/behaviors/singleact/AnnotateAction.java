@@ -107,11 +107,15 @@ public class AnnotateAction extends IdentifiedSingleAction {
 			try {
 				if(AnnotationFileParser.headerExists(oFile) == false) {
 
-					String annotatorName = GiveMessage.inputMessage("Please enter your name:");
-					if(annotatorName == null || annotatorName.equals("")) {
-						GiveMessage.errorMessage("Cannot commit annotation without name.");
-						return;
+					String annotatorName = MyMenu.getAnnotator();
+					if(annotatorName == null) {
+						annotatorName = GiveMessage.inputMessage("Please enter your name:");
+						if(annotatorName == null || annotatorName.equals("")) {
+							GiveMessage.errorMessage("Cannot commit annotation without name.");
+							return;
+						}
 					}
+					MyMenu.setAnnotator(annotatorName);
 
 					AnnotationFileParser.prependHeader(oFile, annotatorName);
 				}

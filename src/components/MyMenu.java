@@ -74,6 +74,8 @@ public class MyMenu extends JMenuBar {
 	private static Set<UpdatingAction> allActions;
 
 	private static MyMenu instance;
+	
+	private static String annotator;
 
 	private static boolean macLF;
 
@@ -305,5 +307,13 @@ public class MyMenu extends JMenuBar {
 			instance = new MyMenu();
 		}
 		return instance;
+	}
+
+	public static void setAnnotator(String annotator) {
+		MyMenu.annotator = annotator;
+	}
+
+	public static String getAnnotator() {
+		return annotator;
 	}
 }
