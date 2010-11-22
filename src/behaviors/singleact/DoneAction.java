@@ -41,7 +41,9 @@ public class DoneAction extends IdentifiedSingleAction {
 	public DoneAction() {
 	}
 	
+	@Override
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		String curFileName = CurAudio.getCurrentAudioFileAbsolutePath();
 		File tmpFile = new File(OSPath.basename(curFileName) + "." + Constants.temporaryAnnotationFileExtension);
 		if(tmpFile.exists()) {

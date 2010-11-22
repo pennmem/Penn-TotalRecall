@@ -60,7 +60,9 @@ public class DeleteAnnotationAction extends IdentifiedSingleAction {
 	 * 
 	 * @param e The <code>ActionEvent</code> provided by the trigger
 	 */
+	@Override	
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		String curFileName = CurAudio.getCurrentAudioFileAbsolutePath();
 		String desiredPath = OSPath.basename(curFileName) + "." + Constants.temporaryAnnotationFileExtension;
 		File oFile = new File(desiredPath);

@@ -14,6 +14,8 @@
 
 package behaviors;
 
+import java.awt.event.ActionEvent;
+
 import javax.swing.AbstractAction;
 
 
@@ -34,6 +36,10 @@ import javax.swing.AbstractAction;
  */
 public abstract class UpdatingAction extends AbstractAction {
 
+	public void actionPerformed(ActionEvent e)  {
+		System.out.println(e.getWhen() + " " + getClass());
+	}
+	
 	/**
 	 * Informs the Action that the program's global state has changed in such a way that the Action may now want to enable/disable itself, or change something else.
 	 * This method is called on every IdentifiedAction after many state changes, e.g. audio opening, audio playing, first annotation made, etc.

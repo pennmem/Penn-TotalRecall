@@ -48,7 +48,9 @@ public class OpenWordpoolAction extends IdentifiedSingleAction {
 	public OpenWordpoolAction() {
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent arg0) {
+		super.actionPerformed(arg0);
 		String maybeLastPath = UserPrefs.prefs.get(UserPrefs.openWordpoolPath, SysInfo.sys.userHomeDir);
 		if(new File(maybeLastPath).exists() == false) {
 			maybeLastPath = SysInfo.sys.userHomeDir;

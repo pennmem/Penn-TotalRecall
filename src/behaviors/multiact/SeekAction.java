@@ -66,7 +66,9 @@ public class SeekAction extends IdentifiedMultiAction{
 	 * 
 	 * @param e The <code>ActionEvent</code> provided by the trigger
 	 */
+	@Override	
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		long curFrame = CurAudio.getAudioProgress();
 		long frameShift = CurAudio.getMaster().millisToFrames(shift);
 		long naivePosition = curFrame + frameShift;

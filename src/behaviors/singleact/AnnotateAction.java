@@ -58,7 +58,9 @@ public class AnnotateAction extends IdentifiedSingleAction {
 	 * 
 	 * @param e The <code>ActionEvent</code> provided by the trigger.
 	 */
+	@Override	
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		//do nothing if no audio file is open
 		if(CurAudio.audioOpen() == false) { 
 			WordpoolDisplay.clearText();

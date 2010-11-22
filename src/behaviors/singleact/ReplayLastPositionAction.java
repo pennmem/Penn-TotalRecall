@@ -23,7 +23,9 @@ import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
 
 public class ReplayLastPositionAction extends IdentifiedSingleAction {
 	
+	@Override	
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		PrecisionPlayer player = CurAudio.getPlayer();		
 		if(player.getStatus() == PrecisionPlayer.Status.PLAYING) {
 			player.stop();

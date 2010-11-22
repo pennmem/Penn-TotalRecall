@@ -50,7 +50,9 @@ public class Last200PlusMoveAction extends IdentifiedMultiAction {
 		}
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		long curFrame = CurAudio.getAudioProgress();
 		long frameShift = CurAudio.getMaster().millisToFrames(shift);
 		long naivePosition = curFrame + frameShift;

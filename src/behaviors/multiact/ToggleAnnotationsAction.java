@@ -62,7 +62,9 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 	 * 
 	 * @param e The <code>ActionEvent</code> provided by the trigger
 	 */
+	@Override	
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		Annotation ann = findAnnotation(myDir, CurAudio.getMaster().framesToMillis(CurAudio.getAudioProgress()));
 		if(ann == null) {
 			System.err.println("It should not have been possible to call " + getClass().getName() + ". Could not find matching annotation");

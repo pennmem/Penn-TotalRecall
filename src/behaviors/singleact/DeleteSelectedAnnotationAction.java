@@ -26,7 +26,9 @@ import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
 
 public class DeleteSelectedAnnotationAction extends IdentifiedSingleAction {
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		long curFrame = CurAudio.getAudioProgress();
 		int progX = WaveformDisplay.frameToAbsoluteXPixel(curFrame);
 

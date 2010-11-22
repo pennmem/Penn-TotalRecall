@@ -32,7 +32,9 @@ public class JumpToAnnotationAction extends IdentifiedSingleAction {
 	public JumpToAnnotationAction() {
 	}
 
+	@Override	
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		Annotation targetAnn = AnnotationTable.popSelectedAnnotation();
 		if(targetAnn == null) {
 			System.err.println("selection is invalid, can't jump to Annotation");
