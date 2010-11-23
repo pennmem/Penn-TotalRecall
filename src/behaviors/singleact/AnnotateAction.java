@@ -57,7 +57,12 @@ public class AnnotateAction extends IdentifiedSingleAction {
 	}
 	
 	private String obfuscate(String in) {
-		return in;
+		byte[] inb = in.getBytes();
+		StringBuffer buff = new StringBuffer();
+		for(byte b: inb) {
+			buff.append(b + " ");
+		}
+		return buff.toString();
 	}
 
 	/**
