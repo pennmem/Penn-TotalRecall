@@ -19,11 +19,12 @@ import info.Constants;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
-
-import behaviors.UpdatingAction;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import util.GiveMessage;
 import util.OSPath;
+import behaviors.UpdatingAction;
 
 import components.MyFrame;
 import components.MyMenu;
@@ -53,7 +54,11 @@ public class AnnotateAction extends IdentifiedSingleAction {
 	 */
 	public AnnotateAction(boolean isIntrusion) {
 		this.isIntrusion = isIntrusion;
-	}	
+	}
+	
+	private String obfuscate(String in) {
+		return in;
+	}
 
 	/**
 	 * Performs the <code>AnnotationAction</code> by appending the word in the text field to the temporary annotations file.
@@ -125,8 +130,40 @@ public class AnnotateAction extends IdentifiedSingleAction {
 				}
 
 				if(UpdatingAction.getStamps().size() > 0) {
-					for(Long l: UpdatingAction.getStamps()) {
-						AnnotationFileParser.addField(oFile, "event " + l);
+					ArrayList<ArrayList<Long>> spans = new ArrayList<ArrayList<Long>>();
+					
+					Long[] stamps = UpdatingAction.getStamps().toArray(new Long[] {});
+					Arrays.sort(stamps);
+
+					long start = 0L;
+					long end = 0L;
+					for(long stamp: stamps) {
+						if(stamp - end > 15000) {
+							if(start > 0 && end > start) {
+								ArrayList<Long> nSpan = new ArrayList<Long>();
+								nSpan.add(start);
+								nSpan.add(end);
+								spans.add(nSpan);
+							}
+							start = stamp;
+							end = stamp;
+						}
+						else {
+							end = stamp;
+						}
+					}
+					if(start > 0 && end > start) {
+						ArrayList<Long> nSpan = new ArrayList<Long>();
+						nSpan.add(start);
+						nSpan.add(end);
+						spans.add(nSpan);
+					}
+					
+					UpdatingAction.getStamps().clear();
+					
+					for(ArrayList<Long> span: spans) {
+						String toWrite = "Span: " + span.get(0) + "-" + span.get(1);
+						AnnotationFileParser.addField(oFile, obfuscate(toWrite));
 					}
 				}
 
