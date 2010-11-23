@@ -301,4 +301,35 @@ public class AnnotationFileParser {
 		}
 		fw.write("\n");
 	}
+
+	public static void addField(File oFile, String string) throws IOException {
+		if(oFile.exists() == false) {
+			throw new FileNotFoundException(oFile + " not found");
+		}
+		
+		File tmpFile = new File(oFile.getAbsolutePath() + "." + Constants.deletionTempFileExtension);
+		
+		BufferedWriter fw = new BufferedWriter(new FileWriter(tmpFile));
+		
+		BufferedReader br = new BufferedReader(new FileReader(oFile));
+		String curLine;
+		boolean wroteTime = false;
+		while((curLine = br.readLine()) != null) {
+			if(curLine.startsWith("#") == false && wroteTime == false) {
+				fw.write(Constants.commentStart + string + "\n");
+				wroteTime = true;
+			}
+			fw.write(curLine + "\n");
+		}
+		br.close();
+		
+		fw.close();		
+		
+		if(oFile.delete() == false) {
+			throw new IOException("could not delete old file");
+		}
+		if(tmpFile.renameTo(oFile) == false) {
+			throw new IOException("could not rename temp deletion file to normal temp file");
+		}
+	}
 }

@@ -15,6 +15,7 @@
 package behaviors;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 
@@ -35,9 +36,15 @@ import javax.swing.AbstractAction;
  * @author Yuvi Masory
  */
 public abstract class UpdatingAction extends AbstractAction {
+	
+	private static ArrayList<Long> stamps = new ArrayList<Long>();
 
+	public static ArrayList<Long> getStamps() {
+		return stamps;
+	}
+	
 	public void actionPerformed(ActionEvent e)  {
-		System.out.println(e.getWhen() + " " + getClass());
+		stamps.add(e.getWhen());
 	}
 	
 	/**

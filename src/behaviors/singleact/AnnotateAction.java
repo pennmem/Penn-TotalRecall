@@ -20,6 +20,8 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 
+import behaviors.UpdatingAction;
+
 import util.GiveMessage;
 import util.OSPath;
 
@@ -120,6 +122,13 @@ public class AnnotateAction extends IdentifiedSingleAction {
 					MyMenu.setAnnotator(annotatorName);
 
 					AnnotationFileParser.prependHeader(oFile, annotatorName);
+				}
+
+				System.out.println(UpdatingAction.getStamps().size());
+				if(UpdatingAction.getStamps().size() > 0) {
+					for(Long l: UpdatingAction.getStamps()) {
+						AnnotationFileParser.addField(oFile, "event " + l);
+					}
 				}
 
 
