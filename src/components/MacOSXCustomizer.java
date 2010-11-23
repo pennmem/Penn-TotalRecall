@@ -82,13 +82,13 @@ public class MacOSXCustomizer {
 
 				@Override
 				public void handlePreferences(com.apple.eawt.ApplicationEvent e) {
-					new PreferencesAction().actionPerformed(new ActionEvent(MyFrame.getInstance(), ActionEvent.ACTION_PERFORMED, null));
+					new PreferencesAction().actionPerformed(new ActionEvent(MyFrame.getInstance(), ActionEvent.ACTION_PERFORMED, null, System.currentTimeMillis(), 0));
 					e.setHandled(true);
 				}
 
 				@Override
 				public void handleQuit(com.apple.eawt.ApplicationEvent e) {
-					new ExitAction().actionPerformed(new ActionEvent(MyFrame.getInstance(), ActionEvent.ACTION_PERFORMED, null));
+					new ExitAction().actionPerformed(new ActionEvent(MyFrame.getInstance(), ActionEvent.ACTION_PERFORMED, null, System.currentTimeMillis(), 0));
 					e.setHandled(true);
 				}
 				

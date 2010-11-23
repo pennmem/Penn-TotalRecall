@@ -30,7 +30,7 @@ public class ReplayLastPositionAction extends IdentifiedSingleAction {
 		if(player.getStatus() == PrecisionPlayer.Status.PLAYING) {
 			player.stop();
 		}
-		new ReturnToLastPositionAction().actionPerformed(new ActionEvent(MyMenu.getInstance(), ActionEvent.ACTION_PERFORMED, null));
+		new ReturnToLastPositionAction().actionPerformed(new ActionEvent(MyMenu.getInstance(), ActionEvent.ACTION_PERFORMED, null, System.currentTimeMillis(), 0));
 		new PlayPauseAction(false).actionPerformed(new ActionEvent(MyMenu.getInstance(), ActionEvent.ACTION_PERFORMED, null));
 	}
 

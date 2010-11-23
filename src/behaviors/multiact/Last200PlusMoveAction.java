@@ -70,7 +70,8 @@ public class Last200PlusMoveAction extends IdentifiedMultiAction {
 		CurAudio.setAudioProgressWithoutUpdatingActions(finalPosition); //not using setAudioProgressAndUpdateActions() because we don't want to slow down start of playback
 		CurAudio.getPlayer().queuePlayAt(finalPosition);
 
-		replayer.actionPerformed(new ActionEvent(MyMenu.getInstance(), ActionEvent.ACTION_PERFORMED, null));
+		replayer.actionPerformed(new ActionEvent(MyMenu.getInstance(), ActionEvent.ACTION_PERFORMED, null, System.currentTimeMillis()
+				, 0));
 
 		MyMenu.updateActions();
 	}

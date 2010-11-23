@@ -124,7 +124,6 @@ public class AnnotateAction extends IdentifiedSingleAction {
 					AnnotationFileParser.prependHeader(oFile, annotatorName);
 				}
 
-				System.out.println(UpdatingAction.getStamps().size());
 				if(UpdatingAction.getStamps().size() > 0) {
 					for(Long l: UpdatingAction.getStamps()) {
 						AnnotationFileParser.addField(oFile, "event " + l);
@@ -136,7 +135,7 @@ public class AnnotateAction extends IdentifiedSingleAction {
 
 				//check if we are annotating the same position as an existing annotation, if so delete
 				new DeleteSelectedAnnotationAction().actionPerformed(
-						new ActionEvent(WordpoolDisplay.getInstance(), ActionEvent.ACTION_PERFORMED, null));
+						new ActionEvent(WordpoolDisplay.getInstance(), ActionEvent.ACTION_PERFORMED, null, System.currentTimeMillis(), 0));
 				WaveformDisplay.getInstance().repaint();
 				
 				//file may no longer exist after deletion

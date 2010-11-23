@@ -44,6 +44,9 @@ public abstract class UpdatingAction extends AbstractAction {
 	}
 	
 	public void actionPerformed(ActionEvent e)  {
+		if(e.getWhen() == 0) {
+			System.out.println("zero: " + getClass());
+		}
 		stamps.add(e.getWhen());
 	}
 	
