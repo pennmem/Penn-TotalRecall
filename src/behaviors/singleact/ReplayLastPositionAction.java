@@ -23,12 +23,14 @@ import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
 
 public class ReplayLastPositionAction extends IdentifiedSingleAction {
 	
+	@Override	
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		PrecisionPlayer player = CurAudio.getPlayer();		
 		if(player.getStatus() == PrecisionPlayer.Status.PLAYING) {
 			player.stop();
 		}
-		new ReturnToLastPositionAction().actionPerformed(new ActionEvent(MyMenu.getInstance(), ActionEvent.ACTION_PERFORMED, null));
+		new ReturnToLastPositionAction().actionPerformed(new ActionEvent(MyMenu.getInstance(), ActionEvent.ACTION_PERFORMED, null, System.currentTimeMillis(), 0));
 		new PlayPauseAction(false).actionPerformed(new ActionEvent(MyMenu.getInstance(), ActionEvent.ACTION_PERFORMED, null));
 	}
 

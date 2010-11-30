@@ -26,7 +26,9 @@ import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
 
 public class DeleteSelectedAnnotationAction extends IdentifiedSingleAction {
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		long curFrame = CurAudio.getAudioProgress();
 		int progX = WaveformDisplay.frameToAbsoluteXPixel(curFrame);
 
@@ -35,7 +37,7 @@ public class DeleteSelectedAnnotationAction extends IdentifiedSingleAction {
 			int annX = WaveformDisplay.frameToAbsoluteXPixel(CurAudio.getMaster().millisToFrames(anns[i].getTime()));
 			if(progX == annX) {
 				new DeleteAnnotationAction(i).actionPerformed(
-						new ActionEvent(MySplitPane.getInstance(), ActionEvent.ACTION_PERFORMED, null));
+						new ActionEvent(MySplitPane.getInstance(), ActionEvent.ACTION_PERFORMED, null, System.currentTimeMillis(), 0));
 				return;
 			}
 		}

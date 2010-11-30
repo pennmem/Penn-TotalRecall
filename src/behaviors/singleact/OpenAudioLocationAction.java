@@ -55,7 +55,9 @@ public class OpenAudioLocationAction extends IdentifiedSingleAction {
 	 * Failing that, uses current directory.
 	 * Afterwards adds the selected files and requests the list be sorted.
 	 */
+	@Override	
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		String maybeLastPath = UserPrefs.prefs.get(UserPrefs.openLocationPath, SysInfo.sys.userHomeDir);
 		if(new File(maybeLastPath).exists() == false) {
 			maybeLastPath = SysInfo.sys.userHomeDir;

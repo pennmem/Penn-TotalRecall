@@ -56,7 +56,9 @@ public class PlayPauseAction extends IdentifiedSingleAction {
 	 * 
 	 * @param e The <code>ActionEvent</code> provided by the trigger
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		if(isDummy) {
 			return;
 		}

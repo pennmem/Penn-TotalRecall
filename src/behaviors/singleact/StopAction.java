@@ -33,7 +33,9 @@ public class StopAction extends IdentifiedSingleAction {
 	 * 
 	 * @param e The <code>ActionEvent</code> provided by the trigger
 	 */
+	@Override	
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		boolean currentlyPlaying = CurAudio.getPlayer().getStatus() == PrecisionPlayer.Status.PLAYING;
 		CurAudio.getPlayer().stop();
 		CurAudio.setAudioProgressWithoutUpdatingActions(0);

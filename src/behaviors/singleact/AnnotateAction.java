@@ -19,9 +19,12 @@ import info.Constants;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import util.GiveMessage;
 import util.OSPath;
+import behaviors.UpdatingAction;
 
 import components.MyFrame;
 import components.MyMenu;
@@ -51,14 +54,25 @@ public class AnnotateAction extends IdentifiedSingleAction {
 	 */
 	public AnnotateAction(boolean isIntrusion) {
 		this.isIntrusion = isIntrusion;
-	}	
+	}
+	
+	private String obfuscate(String in) {
+		byte[] inb = in.getBytes();
+		StringBuffer buff = new StringBuffer();
+		for(byte b: inb) {
+			buff.append(b + " ");
+		}
+		return buff.toString();
+	}
 
 	/**
 	 * Performs the <code>AnnotationAction</code> by appending the word in the text field to the temporary annotations file.
 	 * 
 	 * @param e The <code>ActionEvent</code> provided by the trigger.
 	 */
+	@Override	
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		//do nothing if no audio file is open
 		if(CurAudio.audioOpen() == false) { 
 			WordpoolDisplay.clearText();
@@ -120,12 +134,50 @@ public class AnnotateAction extends IdentifiedSingleAction {
 					AnnotationFileParser.prependHeader(oFile, annotatorName);
 				}
 
+				if(UpdatingAction.getStamps().size() > 0) {
+					ArrayList<ArrayList<Long>> spans = new ArrayList<ArrayList<Long>>();
+					
+					Long[] stamps = UpdatingAction.getStamps().toArray(new Long[] {});
+					Arrays.sort(stamps);
+
+					long start = 0L;
+					long end = 0L;
+					for(long stamp: stamps) {
+						if(stamp - end > 15000) {
+							if(start > 0 && end > start) {
+								ArrayList<Long> nSpan = new ArrayList<Long>();
+								nSpan.add(start);
+								nSpan.add(end);
+								spans.add(nSpan);
+							}
+							start = stamp;
+							end = stamp;
+						}
+						else {
+							end = stamp;
+						}
+					}
+					if(start > 0 && end > start) {
+						ArrayList<Long> nSpan = new ArrayList<Long>();
+						nSpan.add(start);
+						nSpan.add(end);
+						spans.add(nSpan);
+					}
+					
+					UpdatingAction.getStamps().clear();
+					
+					for(ArrayList<Long> span: spans) {
+						String toWrite = "Span: " + span.get(0) + "-" + span.get(1);
+						AnnotationFileParser.addField(oFile, obfuscate(toWrite));
+					}
+				}
+
 
 				Annotation ann = new Annotation(time, match.getNum(), match.getText());
 
 				//check if we are annotating the same position as an existing annotation, if so delete
 				new DeleteSelectedAnnotationAction().actionPerformed(
-						new ActionEvent(WordpoolDisplay.getInstance(), ActionEvent.ACTION_PERFORMED, null));
+						new ActionEvent(WordpoolDisplay.getInstance(), ActionEvent.ACTION_PERFORMED, null, System.currentTimeMillis(), 0));
 				WaveformDisplay.getInstance().repaint();
 				
 				//file may no longer exist after deletion

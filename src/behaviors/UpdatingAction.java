@@ -14,6 +14,9 @@
 
 package behaviors;
 
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+
 import javax.swing.AbstractAction;
 
 
@@ -33,7 +36,20 @@ import javax.swing.AbstractAction;
  * @author Yuvi Masory
  */
 public abstract class UpdatingAction extends AbstractAction {
+	
+	private static ArrayList<Long> stamps = new ArrayList<Long>();
 
+	public static ArrayList<Long> getStamps() {
+		return stamps;
+	}
+	
+	public void actionPerformed(ActionEvent e)  {
+		if(e.getWhen() == 0) {
+			System.out.println("zero: " + getClass());
+		}
+		stamps.add(e.getWhen());
+	}
+	
 	/**
 	 * Informs the Action that the program's global state has changed in such a way that the Action may now want to enable/disable itself, or change something else.
 	 * This method is called on every IdentifiedAction after many state changes, e.g. audio opening, audio playing, first annotation made, etc.

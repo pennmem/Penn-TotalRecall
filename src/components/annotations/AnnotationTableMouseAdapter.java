@@ -42,7 +42,7 @@ public class AnnotationTableMouseAdapter extends MouseAdapter {
 			JumpToAnnotationAction jumpAct = new JumpToAnnotationAction();
 			if((CurAudio.getPlayer().getStatus() == PrecisionPlayer.Status.PLAYING) == false) {
 				//we are manually generating the event, so we must ourselves check the conditions
-				jumpAct.actionPerformed(new ActionEvent(AnnotationTable.getInstance(), ActionEvent.ACTION_PERFORMED, null));
+				jumpAct.actionPerformed(new ActionEvent(AnnotationTable.getInstance(), ActionEvent.ACTION_PERFORMED, null, System.currentTimeMillis(), 0));
 			}
 		}
 	}

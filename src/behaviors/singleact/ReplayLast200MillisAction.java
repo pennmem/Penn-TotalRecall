@@ -37,7 +37,9 @@ public class ReplayLast200MillisAction extends IdentifiedSingleAction {
 	 * 
 	 * @param e The <code>ActionEvent</code> provided by the trigger
 	 */
+	@Override	
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		PrecisionPlayer player = CurAudio.getPlayer();
 		player.setLoudness(CurAudio.getDesiredLoudness());
 		

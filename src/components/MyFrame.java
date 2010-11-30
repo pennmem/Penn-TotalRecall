@@ -58,7 +58,7 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
 		addWindowListener(new WindowAdapter(){
 			@Override
 			public void windowClosing(WindowEvent e) {
-				new ExitAction().actionPerformed(new ActionEvent(MyFrame.getInstance(), ActionEvent.ACTION_PERFORMED, null));
+				new ExitAction().actionPerformed(new ActionEvent(MyFrame.getInstance(), ActionEvent.ACTION_PERFORMED, null, System.currentTimeMillis(), 0));
 			}
 		});
 

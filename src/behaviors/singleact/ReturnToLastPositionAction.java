@@ -23,7 +23,9 @@ import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
 
 public class ReturnToLastPositionAction extends IdentifiedSingleAction {
 
+	@Override	
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		long pos = CurAudio.popLastPlayPos();
 		CurAudio.setAudioProgressAndUpdateActions(pos);
 		CurAudio.getPlayer().queuePlayAt(pos);

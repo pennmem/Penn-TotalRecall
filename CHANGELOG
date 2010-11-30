@@ -12,3 +12,6 @@ Eliminated NullPointerExceptions in focus traversal
 == Version 0.56 ==
 Update FMOD sound system to 4.32 branch, to un-break audio on
 Ubuntu 10.10.
+
+== Version 0.57 ==
+Timing system.

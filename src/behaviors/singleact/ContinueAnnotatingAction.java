@@ -53,7 +53,9 @@ public class ContinueAnnotatingAction extends IdentifiedSingleAction {
 	 * 
 	 * @param e The <code>ActionEvent</code> provided by the trigger
 	 */
+	@Override	
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		if(myAudioFile.isDone() == false) {
 			System.err.println("it should not have been possible to call ContinueAnnotatingAction on an incomplete file");
 			return;

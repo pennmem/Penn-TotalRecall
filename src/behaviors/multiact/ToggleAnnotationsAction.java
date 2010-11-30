@@ -74,7 +74,9 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
 	 * 
 	 * @param e The <code>ActionEvent</code> provided by the trigger
 	 */
+	@Override	
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		Annotation ann = findAnnotation(myDir, CurAudio.getMaster().framesToMillis(CurAudio.getAudioProgress()));
 		// This could be used to check if the last annotation has been reached 
 		int numOfAnnotations = AnnotationDisplay.getNumAnnotations();

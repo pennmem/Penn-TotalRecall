@@ -49,7 +49,9 @@ public class ZoomAction extends IdentifiedMultiAction {
 	 * 
 	 * @param e The <code>ActionEvent</code> provided by the trigger
 	 */
+	@Override	
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		if(dir == Direction.IN) {
 			WaveformDisplay.zoomX(true);
 		}
