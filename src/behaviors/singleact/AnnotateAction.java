@@ -143,7 +143,7 @@ public class AnnotateAction extends IdentifiedSingleAction {
 					long start = 0L;
 					long end = 0L;
 					for(long stamp: stamps) {
-						if(stamp - end > 15000) {
+						if(stamp - end > Constants.timeout) {
 							if(start > 0 && end > start) {
 								ArrayList<Long> nSpan = new ArrayList<Long>();
 								nSpan.add(start);

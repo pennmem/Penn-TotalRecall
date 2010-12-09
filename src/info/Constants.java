@@ -147,6 +147,8 @@ public class Constants {
 	public static final String commentStart = "#";
 	
 	public static final String headerStartLine = commentStart + "Begin Header. [Do not edit before this line. Never edit with an instance of the program open.]";
+
+	public static int timeout = 15000;
 	
 	/**
 	 * Private constructor to prevent instantiation.
