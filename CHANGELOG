@@ -15,3 +15,9 @@ Ubuntu 10.10.
 
 == Version 0.57 ==
 Timing system.
+
+== Version 0.58 ==
+Fix lack of annotations area refresh after file switch (#26).
+Save annotator name for entire JVM run (#28).
+
+

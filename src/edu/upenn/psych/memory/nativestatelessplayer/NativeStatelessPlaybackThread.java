@@ -20,6 +20,8 @@ import info.SysInfo;
 import java.io.File;
 import java.util.List;
 
+import behaviors.UpdatingAction;
+
 import edu.upenn.psych.memory.precisionplayer.PrecisionEvent;
 import edu.upenn.psych.memory.precisionplayer.PrecisionEventLauncher;
 import edu.upenn.psych.memory.precisionplayer.PrecisionListener;
@@ -122,6 +124,7 @@ public class NativeStatelessPlaybackThread extends Thread {
 					break;
 				}
 				try {
+					UpdatingAction.getStamps().add(System.currentTimeMillis());
 					Thread.sleep(30);
 				}
 				catch(InterruptedException e) {

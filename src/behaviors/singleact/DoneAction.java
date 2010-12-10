@@ -53,6 +53,7 @@ public class DoneAction extends IdentifiedSingleAction {
 				return;
 			}
 			else {
+				AnnotateAction.writeSpans();
 				if(!tmpFile.renameTo(oFile)) {
 					GiveMessage.errorMessage("Operation failed.");
 					return;

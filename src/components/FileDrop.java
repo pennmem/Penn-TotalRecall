@@ -60,7 +60,7 @@ import java.io.Reader;
  * @author  rharder@users.sf.net
  * @version 1.0.1
  */
-@SuppressWarnings({ "unchecked", "unused" })
+@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 public class FileDrop
 {
     private transient javax.swing.border.Border normalBorder;

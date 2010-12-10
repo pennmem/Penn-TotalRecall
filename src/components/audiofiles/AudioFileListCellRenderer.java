@@ -41,7 +41,7 @@ public class AudioFileListCellRenderer extends DefaultListCellRenderer {
 	private final Font bold;
 	private final Font plain;
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public AudioFileListCellRenderer() {
 		plain = getFont();
 		Map attributes = plain.getAttributes();
