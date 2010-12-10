@@ -56,13 +56,19 @@ public class AnnotateAction extends IdentifiedSingleAction {
 		this.isIntrusion = isIntrusion;
 	}
 	
-	private String obfuscate(String in) {
+	private static String obfuscate(String in) {
 		byte[] inb = in.getBytes();
 		StringBuffer buff = new StringBuffer();
 		for(byte b: inb) {
 			buff.append(b + " ");
 		}
 		return buff.toString();
+	}
+	
+	public static File getOutputFile() {
+		String curFileName = CurAudio.getCurrentAudioFileAbsolutePath();
+		File oFile = new File(OSPath.basename(curFileName) + "." + Constants.temporaryAnnotationFileExtension);
+		return oFile;
 	}
 
 	/**
@@ -104,8 +110,7 @@ public class AnnotateAction extends IdentifiedSingleAction {
 
 
 		//append the new annotation to the end of the temporary annotation file
-		String curFileName = CurAudio.getCurrentAudioFileAbsolutePath();
-		File oFile = new File(OSPath.basename(curFileName) + "." + Constants.temporaryAnnotationFileExtension);		
+		File oFile = getOutputFile();
 
 		if(oFile.exists() == false) {		
 			try {
@@ -133,45 +138,6 @@ public class AnnotateAction extends IdentifiedSingleAction {
 
 					AnnotationFileParser.prependHeader(oFile, annotatorName);
 				}
-
-				if(UpdatingAction.getStamps().size() > 0) {
-					ArrayList<ArrayList<Long>> spans = new ArrayList<ArrayList<Long>>();
-					
-					Long[] stamps = UpdatingAction.getStamps().toArray(new Long[] {});
-					Arrays.sort(stamps);
-
-					long start = 0L;
-					long end = 0L;
-					for(long stamp: stamps) {
-						if(stamp - end > Constants.timeout) {
-							if(start > 0 && end > start) {
-								ArrayList<Long> nSpan = new ArrayList<Long>();
-								nSpan.add(start);
-								nSpan.add(end);
-								spans.add(nSpan);
-							}
-							start = stamp;
-							end = stamp;
-						}
-						else {
-							end = stamp;
-						}
-					}
-					if(start > 0 && end > start) {
-						ArrayList<Long> nSpan = new ArrayList<Long>();
-						nSpan.add(start);
-						nSpan.add(end);
-						spans.add(nSpan);
-					}
-					
-					UpdatingAction.getStamps().clear();
-					
-					for(ArrayList<Long> span: spans) {
-						String toWrite = "Span: " + span.get(0) + "-" + span.get(1);
-						AnnotationFileParser.addField(oFile, obfuscate(toWrite));
-					}
-				}
-
 
 				Annotation ann = new Annotation(time, match.getNum(), match.getText());
 
@@ -212,6 +178,50 @@ public class AnnotateAction extends IdentifiedSingleAction {
 	    //return focus to the frame after annotation, for the sake of action key bindings
 	    MyFrame.getInstance().requestFocusInWindow();
 	    MyMenu.updateActions();
+	}
+	
+	public static void writeSpans() {
+		if(UpdatingAction.getStamps().size() > 0) {
+			ArrayList<ArrayList<Long>> spans = new ArrayList<ArrayList<Long>>();
+			
+			Long[] stamps = UpdatingAction.getStamps().toArray(new Long[] {});
+			Arrays.sort(stamps);
+
+			long start = 0L;
+			long end = 0L;
+			for(long stamp: stamps) {
+				if(stamp - end > Constants.timeout) {
+					if(start > 0 && end > start) {
+						ArrayList<Long> nSpan = new ArrayList<Long>();
+						nSpan.add(start);
+						nSpan.add(end);
+						spans.add(nSpan);
+					}
+					start = stamp;
+					end = stamp;
+				}
+				else {
+					end = stamp;
+				}
+			}
+			if(start > 0 && end > start) {
+				ArrayList<Long> nSpan = new ArrayList<Long>();
+				nSpan.add(start);
+				nSpan.add(end);
+				spans.add(nSpan);
+			}
+			
+			UpdatingAction.getStamps().clear();
+			
+			for(ArrayList<Long> span: spans) {
+				String toWrite = "Span: " + span.get(0) + "-" + span.get(1);
+				try {
+					AnnotationFileParser.addField(getOutputFile(), obfuscate(toWrite));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 
