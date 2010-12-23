@@ -25,7 +25,6 @@ public class ScreenSeekAction extends IdentifiedMultiAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		super.actionPerformed(e);
-		System.out.println("width: " + WaveformDisplay.getInstance().getWidth());
 		
 		int shift = (int) (((double)WaveformDisplay.getInstance().getWidth() / (double)GUIConstants.zoomlessPixelsPerSecond) * 1000);
 		shift -= shift/5;
@@ -78,7 +77,7 @@ public class ScreenSeekAction extends IdentifiedMultiAction {
 					}
 				}
 				else if(CurAudio.getAudioProgress() == CurAudio.getMaster().durationInFrames() - 1) {
-					if(dir == Dir.BACKWARD) {
+					if(dir == Dir.FORWARD) {
 						setEnabled(false);
 					}	
 					else {
