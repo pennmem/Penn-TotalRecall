@@ -1,11 +1,12 @@
 package behaviors.multiact;
 
+import info.GUIConstants;
 import info.SysInfo;
-import info.UserPrefs;
 
 import java.awt.event.ActionEvent;
 
 import components.MyFrame;
+import components.waveform.WaveformDisplay;
 
 import control.CurAudio;
 import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
@@ -15,17 +16,23 @@ public class ScreenSeekAction extends IdentifiedMultiAction {
 	public static enum Dir {FORWARD, BACKWARD}
 
 	private Dir dir;
-	private int shift;
 	
 	public ScreenSeekAction(Dir dir) {
 		super(dir);
 		this.dir = dir;
-		updateSeekAmount();
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		super.actionPerformed(e);
+		System.out.println("width: " + WaveformDisplay.getInstance().getWidth());
+		
+		int shift = (int) (((double)WaveformDisplay.getInstance().getWidth() / (double)GUIConstants.zoomlessPixelsPerSecond) * 1000);
+		shift -= shift/5;
+		if(dir == Dir.BACKWARD) {
+			shift *= -1;
+		}
+		
 		long curFrame = CurAudio.getAudioProgress();
 		long frameShift = CurAudio.getMaster().millisToFrames(shift);
 		long naivePosition = curFrame + frameShift;
@@ -46,14 +53,6 @@ public class ScreenSeekAction extends IdentifiedMultiAction {
 		CurAudio.setAudioProgressAndUpdateActions(finalPosition);
 		CurAudio.getPlayer().queuePlayAt(finalPosition);
 		MyFrame.getInstance().requestFocusInWindow();
-	}
-	
-	public void updateSeekAmount() {
-		int screenFull = UserPrefs.getLargeShift();
-		if(dir == Dir.BACKWARD) {
-			screenFull *= -1;
-		}
-		shift = screenFull;
 	}
 	
 	@Override
