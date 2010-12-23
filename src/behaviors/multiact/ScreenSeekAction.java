@@ -1,6 +1,12 @@
 package behaviors.multiact;
 
 import info.SysInfo;
+import info.UserPrefs;
+
+import java.awt.event.ActionEvent;
+
+import components.MyFrame;
+
 import control.CurAudio;
 import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
 
@@ -9,10 +15,45 @@ public class ScreenSeekAction extends IdentifiedMultiAction {
 	public static enum Dir {FORWARD, BACKWARD}
 
 	private Dir dir;
+	private int shift;
 	
 	public ScreenSeekAction(Dir dir) {
 		super(dir);
 		this.dir = dir;
+		updateSeekAmount();
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
+		long curFrame = CurAudio.getAudioProgress();
+		long frameShift = CurAudio.getMaster().millisToFrames(shift);
+		long naivePosition = curFrame + frameShift;
+		long frameLength = CurAudio.getMaster().durationInFrames();
+
+		long finalPosition = naivePosition;
+
+		if(naivePosition < 0) {
+			finalPosition = 0;
+		}
+		else if(naivePosition >= frameLength) {
+			finalPosition = frameLength - 1;
+		}
+		if(SysInfo.sys.forceListen) {
+			finalPosition = Math.min(finalPosition, CurAudio.getListener().getGreatestProgress());
+		}
+
+		CurAudio.setAudioProgressAndUpdateActions(finalPosition);
+		CurAudio.getPlayer().queuePlayAt(finalPosition);
+		MyFrame.getInstance().requestFocusInWindow();
+	}
+	
+	public void updateSeekAmount() {
+		int screenFull = UserPrefs.getLargeShift();
+		if(dir == Dir.BACKWARD) {
+			screenFull *= -1;
+		}
+		shift = screenFull;
 	}
 	
 	@Override
