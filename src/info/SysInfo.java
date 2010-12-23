@@ -409,7 +409,7 @@ public class SysInfo {
 			forceListen = false;
 		}
 		else {
-			forceListen = true;
+			forceListen = false;
 		}
 		
 		//pretty waveform 
