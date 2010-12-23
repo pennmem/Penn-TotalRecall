@@ -19,6 +19,7 @@ import java.util.Map;
 
 import util.ActionIdentification;
 import behaviors.multiact.Last200PlusMoveAction;
+import behaviors.multiact.ScreenSeekAction;
 import behaviors.multiact.SeekAction;
 import behaviors.multiact.ToggleAnnotationsAction;
 import behaviors.multiact.ZoomAction;
@@ -177,6 +178,12 @@ public class ActionNames {
 			final String medium = "Medium Amount";
 			final String large = "Large Amount";
 			enumMap = new HashMap<Enum<?>, ActionIdentification>();
+			enumMap.put(
+					ScreenSeekAction.Dir.FORWARD,
+					new ActionIdentification("Screen Forward", null));
+			enumMap.put(
+					ScreenSeekAction.Dir.BACKWARD,
+					new ActionIdentification("Screen Backward", null));
 			enumMap.put(
 					SeekAction.SeekAmount.FORWARD_SMALL, 
 					new ActionIdentification(f + small, null));

@@ -22,6 +22,7 @@ import java.util.Map;
 import javax.swing.KeyStroke;
 
 import behaviors.multiact.Last200PlusMoveAction;
+import behaviors.multiact.ScreenSeekAction;
 import behaviors.multiact.SeekAction;
 import behaviors.multiact.ToggleAnnotationsAction;
 import behaviors.multiact.ZoomAction;
@@ -114,6 +115,8 @@ public class KeyBindings {
 			enumMap.put(ZoomAction.Direction.OUT, KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, MENU, false));
 			enumMap.put(Last200PlusMoveAction.Direction.BACKWARD, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, ALT, false));
 			enumMap.put(Last200PlusMoveAction.Direction.FORWARD, KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, ALT, false));
+			enumMap.put(ScreenSeekAction.Dir.FORWARD, KeyStroke.getKeyStroke(KeyEvent.VK_N, MENU, false));
+			enumMap.put(ScreenSeekAction.Dir.BACKWARD, KeyStroke.getKeyStroke(KeyEvent.VK_P, MENU, false));
 		}
 		return enumMap;
 	}

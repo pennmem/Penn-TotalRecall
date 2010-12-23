@@ -31,6 +31,7 @@ import javax.swing.UIManager;
 
 import behaviors.UpdatingAction;
 import behaviors.multiact.Last200PlusMoveAction;
+import behaviors.multiact.ScreenSeekAction;
 import behaviors.multiact.SeekAction;
 import behaviors.multiact.ToggleAnnotationsAction;
 import behaviors.multiact.ZoomAction;
@@ -178,6 +179,8 @@ public class MyMenu extends JMenuBar {
 				new Last200PlusMoveAction(Last200PlusMoveAction.Direction.FORWARD));		
 		JMenuItem jmiLast200MoveLeft = new JMenuItem(
 				new Last200PlusMoveAction(Last200PlusMoveAction.Direction.BACKWARD));
+		JMenuItem jmiScreenForward = new JMenuItem(new ScreenSeekAction(ScreenSeekAction.Dir.FORWARD));
+		JMenuItem jmiScreenBackward = new JMenuItem(new ScreenSeekAction(ScreenSeekAction.Dir.BACKWARD));
 		jmSeek.add(jmiSeekForwardSmall);
 		jmSeek.add(jmiSeekSmallBackward);
 		jmSeek.add(jmiSeekForwardMedium);
@@ -186,6 +189,8 @@ public class MyMenu extends JMenuBar {
 		jmSeek.add(jmiSeekBackwardLarge);
 		jmSeek.add(jmiLast200MoveRight);
 		jmSeek.add(jmiLast200MoveLeft);
+		jmSeek.add(jmiScreenForward);
+		jmSeek.add(jmiScreenBackward);
 
 		jmAudio.add(jmiPlayPause);
 		jmAudio.add(jmiStop);
