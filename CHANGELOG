@@ -1,3 +1,6 @@
+== Version 1.10 ==
+Add keyboard shortcut manager.
+
 == Version 0.55 ==
 End-chopping behavior eliminated from Control-Z action on all platforms.
 

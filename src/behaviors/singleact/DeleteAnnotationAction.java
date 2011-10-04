@@ -20,6 +20,8 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.Action;
+
 import util.GiveMessage;
 import util.OSPath;
 
@@ -51,6 +53,7 @@ public class DeleteAnnotationAction extends IdentifiedSingleAction {
 	public DeleteAnnotationAction(int rowIndex) {
 		this.rowIndex = rowIndex;
 		this.annToDelete = AnnotationDisplay.getAnnotationsInOrder()[rowIndex];
+		this.putValue(Action.NAME, "Delete Annotation");
 	}
 
 	/**

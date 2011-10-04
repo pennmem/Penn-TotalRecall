@@ -19,6 +19,10 @@ import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 
+import components.MyMenu;
+
+import control.XActionManager;
+
 
 /**
  * An AbstractAction that processes updates in program state.
@@ -36,6 +40,11 @@ import javax.swing.AbstractAction;
  * @author Yuvi Masory
  */
 public abstract class UpdatingAction extends AbstractAction {
+	
+	public UpdatingAction(Enum<?> e) {
+		MyMenu.registerAction(this);
+		XActionManager.registerAction(this, e);
+	}
 	
 	private static ArrayList<Long> stamps = new ArrayList<Long>();
 

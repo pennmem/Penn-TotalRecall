@@ -20,6 +20,8 @@ import info.SysInfo;
 import java.awt.event.ActionEvent;
 import java.io.File;
 
+import behaviors.multiact.AnnotateAction;
+
 import util.GiveMessage;
 import util.OSPath;
 

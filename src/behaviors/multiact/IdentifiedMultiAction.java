@@ -14,12 +14,7 @@
 
 package behaviors.multiact;
 
-import info.ActionNames;
-import info.KeyBindings;
-
 import behaviors.UpdatingAction;
-
-import components.MyMenu;
 
 
 /**
@@ -28,7 +23,7 @@ import components.MyMenu;
  * <p>All <code>AbstracActions</code> in this program should inherit {@link behaviors.singleact.IdentifiedSingleAction} or <code>IdentifiedMultiAction</code>, either directly or indirectly.
  *
  * <p>Inheriting this class allows for the central storage of names, tool tips, and key bindings in the classes
- * {@link info.ActionNames} and @link{info.KeyBindings}. 
+ * {@link control.XActionManager} and @link{info.KeyBindings}. 
  *  
  * <p>Some UpdatingActions need to be instantiated many times (e.g., <code>ZoomAction</code> can zoom in or out), with each resulting object requiring a different name,
  * tool tip, and key binding. This class address that need by requiring an <code>Enum</code> from the action to help identify the correct name/tooltip/keybinding set.
@@ -46,9 +41,6 @@ public abstract class IdentifiedMultiAction extends UpdatingAction {
 	 * @param e The <code>Enum</code> that will be used in <code>Info.ActionNames</code> and <code>Info.KeyBindings</code> to correctly associate instances with their names, tool tips, and key bindings.
 	 */
 	public IdentifiedMultiAction(Enum<?> e) {
-		putValue(NAME, ActionNames.lookupName(e));
-		putValue(SHORT_DESCRIPTION, ActionNames.lookupToolTip(e));
-		putValue(ACCELERATOR_KEY, KeyBindings.lookupBinding(e));
-		MyMenu.registerAction(this);
+		super(e);
 	}
 }

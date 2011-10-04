@@ -38,7 +38,7 @@ import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Keymap;
 
-import behaviors.singleact.AnnotateAction;
+import behaviors.multiact.AnnotateAction;
 
 import components.MyFrame;
 
@@ -60,9 +60,7 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
 		setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 
 		getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false), "annotate regular");
-		getActionMap().put("annotate regular", new AnnotateAction(false));
-
-		setToolTipText("Annotate Intrusion: " + SysInfo.sys.menuKeyString + " + Shift + Enter"); //Keep in sync with keybindings class
+		getActionMap().put("annotate regular", new AnnotateAction(AnnotateAction.Mode.REGULAR));
 
 		Set<AWTKeyStroke> keys = new HashSet<AWTKeyStroke>();
 		keys.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, InputEvent.CTRL_MASK, false));

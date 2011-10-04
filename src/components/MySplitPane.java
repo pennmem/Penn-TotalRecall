@@ -14,9 +14,6 @@
 
 package components;
 
-import info.SysInfo;
-
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.InputMap;
@@ -24,11 +21,13 @@ import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
 
-import behaviors.singleact.AnnotateAction;
+import behaviors.multiact.AnnotateAction;
 import behaviors.singleact.DeleteSelectedAnnotationAction;
 import behaviors.singleact.PlayPauseAction;
 
 import components.waveform.WaveformDisplay;
+
+import control.XActionManager;
 
 /**
  * A custom <code>JSplitPane</code> that serves as the content pane to <code>MyFrame</code>.
@@ -58,16 +57,31 @@ public class MySplitPane extends JSplitPane {
 	    im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "none");
 	    
 
-	    getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, SysInfo.sys.menuKey, false), "delete annotation");
-	    getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, SysInfo.sys.menuKey, false), "delete annotation");
-	    getActionMap().put("delete annotation", new DeleteSelectedAnnotationAction());
-	    getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_P, SysInfo.sys.menuKey, false), "play");
-	    getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "play");
+        DeleteSelectedAnnotationAction deleteAction = new DeleteSelectedAnnotationAction();
+        InputMap deleteActionMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        String DELETE_ACTION_KEY = "delete action";
+        deleteActionMap.put(XActionManager.lookup(deleteAction, null), DELETE_ACTION_KEY);
+	    getActionMap().put(DELETE_ACTION_KEY, deleteAction);
+	    XActionManager.registerInputMap(deleteAction, null, DELETE_ACTION_KEY, deleteActionMap);
+
+	    getInputMap(
+            JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(KeyEvent.VK_SPACE,
+                                       0,
+                                       false), "play");
+
 	    getActionMap().put("play", new PlayPauseAction(false));
-		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(
-				KeyEvent.VK_ENTER, SysInfo.sys.menuKey + InputEvent.SHIFT_MASK, false), "annotate intrusion");
-		getActionMap().put("annotate intrusion", new AnnotateAction(true));
+
+        AnnotateAction intrusionAction = new AnnotateAction(AnnotateAction.Mode.INTRUSION);
+		InputMap intrusionInputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		String ANNOTATE_INTRUSION_KEY = "annotate intrusion";
+		Enum<?> intrusionEnum = AnnotateAction.Mode.INTRUSION;
+		KeyStroke intrusionKey = XActionManager.lookup(intrusionAction, intrusionEnum);
+		intrusionInputMap.put(intrusionKey, ANNOTATE_INTRUSION_KEY);
+		getActionMap().put(ANNOTATE_INTRUSION_KEY, intrusionAction);
+		XActionManager.registerInputMap(intrusionAction, intrusionEnum, ANNOTATE_INTRUSION_KEY, intrusionInputMap);
 		
+
 		getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_HOME, 0, false), "none");
 		getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_END, 0, false), "none");
 	}

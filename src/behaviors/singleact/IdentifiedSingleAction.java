@@ -14,12 +14,7 @@
 
 package behaviors.singleact;
 
-import info.ActionNames;
-import info.KeyBindings;
-
 import behaviors.UpdatingAction;
-
-import components.MyMenu;
 
 /**
  * An UpdatingAction that associates itself with a name, tool tip, and key binding.
@@ -33,13 +28,7 @@ import components.MyMenu;
  */
 public abstract class IdentifiedSingleAction extends UpdatingAction {
 
-	/**
-	 * Creates the action, automatically associating it with the name, tool tip, and accelerator key stored in Info.ActionName and Info.KeyBindings.
-	 */
 	public IdentifiedSingleAction() {
-		putValue(NAME, ActionNames.lookupName(this));
-		putValue(SHORT_DESCRIPTION, ActionNames.lookupToolTip(this));
-		putValue(ACCELERATOR_KEY, KeyBindings.lookupBinding(this));
-		MyMenu.registerAction(this);
+		super(null);
 	}
 }

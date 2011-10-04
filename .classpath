@@ -8,5 +8,16 @@
 	<classpathentry kind="lib" path="lib/signalproc.jar"/>
 	<classpathentry kind="lib" path="test/lib/log4j-1.2.15.jar"/>
 	<classpathentry kind="lib" path="lib/OrangeExtensions-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/swing-shortcut-manager_2.9.1-0.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/scala-library_2.9.1.jar"/>
+	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/icu4j-2.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/jaxen-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/xalan-2.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/xercesImpl-2.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/xml-apis-1.3.02.jar"/>
+	<classpathentry kind="lib" path="lib/xmlParserAPIs-2.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/xom-1.0.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
