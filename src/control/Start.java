@@ -33,6 +33,7 @@ import components.MyFocusTraversalPolicy;
 import components.MyFrame;
 import components.MyMenu;
 import components.MySplitPane;
+import components.ShortcutFrame;
 
 /**
  * Entry point class of the entire program.
@@ -71,6 +72,7 @@ public class Start {
 			e.printStackTrace();
 		}
 
+		ShortcutFrame.instance.toString(); //initialize
 		MyFrame.getInstance(); //creates all the components, so after this line everything is made, just not visible
 		MyFrame.getInstance().setFocusTraversalPolicy(new MyFocusTraversalPolicy());
 		MyMenu.updateActions(); //set up all action states before frame becomes visible but after all components tied to the actions are made		

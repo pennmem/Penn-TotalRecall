@@ -19,6 +19,8 @@ import info.Constants;
 import java.awt.event.ActionEvent;
 import java.io.File;
 
+import javax.swing.Action;
+
 import util.GiveMessage;
 import util.OSPath;
 
@@ -43,6 +45,7 @@ public class ContinueAnnotatingAction extends IdentifiedSingleAction {
 		if(f == null) {
 			throw new IllegalArgumentException("file cannot be null");
 		}
+		this.putValue(Action.NAME, "Continue Editing");
 		myAudioFile = f;
 	}
 	

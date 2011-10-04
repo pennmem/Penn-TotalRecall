@@ -8,5 +8,7 @@
 	<classpathentry kind="lib" path="lib/signalproc.jar"/>
 	<classpathentry kind="lib" path="test/lib/log4j-1.2.15.jar"/>
 	<classpathentry kind="lib" path="lib/OrangeExtensions-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/swing-shortcut-manager_2.9.1-0.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/scala-library_2.9.1.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

@@ -18,19 +18,17 @@ import info.SysInfo;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.Action;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
 import behaviors.UpdatingAction;
 import behaviors.multiact.Last200PlusMoveAction;
+import behaviors.multiact.OpenAudioLocationAction;
 import behaviors.multiact.ScreenSeekAction;
 import behaviors.multiact.SeekAction;
 import behaviors.multiact.ToggleAnnotationsAction;
@@ -38,9 +36,8 @@ import behaviors.multiact.ZoomAction;
 import behaviors.singleact.AboutAction;
 import behaviors.singleact.CheckUpdatesAction;
 import behaviors.singleact.DoneAction;
+import behaviors.singleact.EditShortcutsAction;
 import behaviors.singleact.ExitAction;
-import behaviors.singleact.KeyBindingsMessageAction;
-import behaviors.singleact.OpenAudioLocationAction;
 import behaviors.singleact.OpenWordpoolAction;
 import behaviors.singleact.PlayPauseAction;
 import behaviors.singleact.PreferencesAction;
@@ -48,6 +45,7 @@ import behaviors.singleact.ReplayLast200MillisAction;
 import behaviors.singleact.ReplayLastPositionAction;
 import behaviors.singleact.ReturnToLastPositionAction;
 import behaviors.singleact.StopAction;
+import behaviors.singleact.TipsMessageAction;
 import behaviors.singleact.VisitTutorialSiteAction;
 
 
@@ -98,31 +96,24 @@ public class MyMenu extends JMenuBar {
 	 */
 	private void initFileMenu() {
 		JMenu jmFile = new JMenu("File");
-		if(SysInfo.sys.useMnemonics) {
-			jmFile.setMnemonic(KeyEvent.VK_F);
-		}
 		JMenuItem jmiOpenWordpool = new JMenuItem(
 				new OpenWordpoolAction());
 		if(SysInfo.sys.useAWTFileChoosers) {
 			OpenAudioLocationAction openFileAction = new OpenAudioLocationAction(OpenAudioLocationAction.SelectionMode.FILES_ONLY);
-			openFileAction.putValue(Action.NAME, "Open Audio File...");
-			openFileAction.putValue(Action.SHORT_DESCRIPTION, null);
 			JMenuItem jmiOpenAudioFile = new JMenuItem(openFileAction);
-			
 			OpenAudioLocationAction openFolderAction = new OpenAudioLocationAction(OpenAudioLocationAction.SelectionMode.DIRECTORIES_ONLY);
-			openFolderAction.putValue(Action.NAME, "Open Audio Folder...");			
 			JMenuItem jmiOpenAudioFolder = new JMenuItem(openFolderAction);
-			openFolderAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.ALT_DOWN_MASK + SysInfo.sys.menuKey, false));
-			openFolderAction.putValue(Action.SHORT_DESCRIPTION, null);
 			jmFile.add(jmiOpenAudioFile);
 			jmFile.add(jmiOpenAudioFolder);
 		}
 		else {
 			JMenuItem jmiOpenAudio = new JMenuItem(
-					new OpenAudioLocationAction());
+					new OpenAudioLocationAction(OpenAudioLocationAction.SelectionMode.FILES_AND_DIRECTORIES));
 			jmFile.add(jmiOpenAudio);
 		}
 		jmFile.add(jmiOpenWordpool);
+		JMenuItem jmiShortcuts = new JMenuItem(new EditShortcutsAction());
+		jmFile.add(jmiShortcuts);
 		if(macLF == false) {
 			jmFile.addSeparator();
 			JMenuItem jmiPreferences = new JMenuItem(new PreferencesAction());
@@ -139,9 +130,6 @@ public class MyMenu extends JMenuBar {
 	 */
 	private void initControlsMenu() {
 		JMenu jmAudio = new JMenu("Controls");
-		if(SysInfo.sys.useMnemonics) {
-			jmAudio.setMnemonic(KeyEvent.VK_C);
-		}
 		
 		//see PlayPauseAction docs for explanation of this funniness
 		JMenuItem jmiPlayPause = new JMenuItem(
@@ -206,9 +194,6 @@ public class MyMenu extends JMenuBar {
 	 */
 	private void initAnnotationMenu() {
 		JMenu jmAnnotation = new JMenu("Annotation");
-		if(SysInfo.sys.useMnemonics) {
-			jmAnnotation.setMnemonic(KeyEvent.VK_A);
-		}
 		JMenuItem jmiDone = new JMenuItem(
 				new DoneAction());
 		jmAnnotation.add(jmiDone);
@@ -227,9 +212,6 @@ public class MyMenu extends JMenuBar {
 	@SuppressWarnings("unused")
 	private void initViewMenu() {
 		JMenu jmView = new JMenu("View");
-		if(SysInfo.sys.useMnemonics) {
-			jmView.setMnemonic(KeyEvent.VK_V);
-		}
 		JMenuItem jmiZoomIn = new JMenuItem(
 				new ZoomAction(ZoomAction.Direction.IN));
 		JMenuItem jmiZoomOut = new JMenuItem(				
@@ -244,15 +226,12 @@ public class MyMenu extends JMenuBar {
 	 */
 	private void initHelpMenu() {
 		JMenu jmHelp = new JMenu("Help");
-		if(SysInfo.sys.useMnemonics) {
-			jmHelp.setMnemonic(KeyEvent.VK_H);
-		}
 		JMenuItem jmiVisitMemLab = new JMenuItem(
 				new VisitTutorialSiteAction());
 		JMenuItem jmiCheckUpdates = new JMenuItem(
 				new CheckUpdatesAction(true));
 		JMenuItem jmiKeys = new JMenuItem(
-				new KeyBindingsMessageAction());
+				new TipsMessageAction());
 		jmHelp.add(jmiVisitMemLab);
 		jmHelp.add(jmiCheckUpdates);
 		jmHelp.add(jmiKeys);

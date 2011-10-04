@@ -1,0 +1,250 @@
+<?xml version="1.0"?>
+<!--
+Sample Actions xml file.
+
+# Mask Names #
+Acceptable names for masks are "alt", "command", "ctrl", "menu", and
+"shift".
+"menu" means Command on Mac and Control on other platforms.
+
+# Key Names #
+Key names must be as given by Swing, without the
+  initial "VK_". Full list here:
+http://download.oracle.com/javase/6/docs/api/java/awt/event/KeyEvent.html
+-->
+<actions>
+
+  <!-- Actions with keyboard shortcuts -->
+  <action class="behaviors.singleact.DoneAction"
+          name="Mark Complete"
+          tooltip="Mark Annotation File Complete">
+    <shortcut>
+      <mask keyname="menu" />
+      <mask keyname="shift" />
+      <key keyname="D" />
+    </shortcut>
+  </action>
+
+  <action class="behaviors.multiact.OpenAudioLocationAction"
+          enum="SelectionMode.FILES_AND_DIRECTORIES"
+          name="Add Audio Files..."
+          tooltip="Select File or Folder"
+          os="Linux,Windows"
+          >
+    <shortcut>
+      <mask keyname="menu" />
+      <key keyname="O" />
+    </shortcut>
+  </action>
+
+  <action class="behaviors.multiact.OpenAudioLocationAction"
+          enum="SelectionMode.FILES_ONLY"
+          name="Open Audio File..."
+          os="Mac OS X"
+          >
+    <shortcut>
+      <mask keyname="menu" />
+      <key keyname="O" />
+    </shortcut>
+  </action>
+
+  <action class="behaviors.multiact.OpenAudioLocationAction"
+          enum="SelectionMode.DIRECTORIES_ONLY"
+          name="Open Audio Folder..."
+          os="Mac OS X"
+          >
+    <shortcut>
+      <mask keyname="menu" />
+      <mask keyname="alt" />
+      <key keyname="O" />
+    </shortcut>
+  </action>
+
+  <action class="behaviors.singleact.OpenWordpoolAction"
+          name="Select Wordpool..."
+          tooltip="Select Text File Containing Words in Audio File"
+          >
+    <shortcut>
+      <mask keyname="menu" />
+      <mask keyname="shift" />
+      <key keyname="O" />
+    </shortcut>
+  </action>
+
+  <action class="behaviors.singleact.PlayPauseAction"
+          name="Play/Pause">
+    <shortcut>
+      <mask keyname="menu" />
+      <key keyname="P" />
+    </shortcut>
+  </action>
+  <action class="behaviors.singleact.ReplayLast200MillisAction"
+          name="Replay Last 200 ms">
+    <shortcut>
+      <mask keyname="menu" />
+      <key keyname="Z" />
+    </shortcut>
+  </action>
+  <action class="behaviors.singleact.StopAction"
+          name="Go to Start">
+    <shortcut>
+      <mask keyname="menu" />
+      <key keyname="S" />
+    </shortcut>
+  </action>
+  <action class="behaviors.singleact.ReturnToLastPositionAction"
+          name="Undo Play"
+          tooltip="Return to the position prior to hitting play">
+    <shortcut>
+      <mask keyname="menu" />
+      <key keyname="L" />
+    </shortcut>
+  </action>
+  <action class="behaviors.singleact.ReplayLastPositionAction"
+          name="Replay">
+    <shortcut>
+      <mask keyname="menu" />
+      <key keyname="R" />
+    </shortcut>
+  </action>
+
+  <action class="behaviors.multiact.SeekAction"
+          enum="SeekAmount.FORWARD_SMALL"
+          name="Forward Small Amount">
+    <shortcut>
+      <key keyname="RIGHT" />
+    </shortcut>
+  </action>
+
+  <action class="behaviors.multiact.SeekAction"
+          enum="SeekAmount.BACKWARD_SMALL"
+          name="Backward Small Amount">
+    <shortcut>
+      <key keyname="LEFT" />
+    </shortcut>
+  </action>
+
+  <action class="behaviors.multiact.SeekAction"
+          enum="SeekAmount.FORWARD_MEDIUM"
+          name="Forward Medium Amount">
+    <shortcut>
+      <mask keyname="menu" />
+      <key keyname="RIGHT" />
+    </shortcut>
+  </action>
+
+  <action class="behaviors.multiact.SeekAction"
+          enum="SeekAmount.BACKWARD_MEDIUM"
+          name="Backward Medium Amount">
+    <shortcut>
+      <mask keyname="menu" />
+      <key keyname="LEFT" />
+    </shortcut>
+  </action>
+
+  <action class="behaviors.multiact.SeekAction"
+          enum="SeekAmount.FORWARD_LARGE"
+          name="Forward Large Amount">
+    <shortcut>
+      <mask keyname="menu" />
+      <mask keyname="shift" />
+      <key keyname="RIGHT" />
+    </shortcut>
+  </action>
+
+  <action class="behaviors.singleact.ExitAction"
+          name="Exit"
+          os="Windows,Linux"
+          >
+    <shortcut>
+      <mask keyname="menu" />
+      <key keyname="X" />
+    </shortcut>
+  </action>
+
+  <action class="behaviors.multiact.SeekAction"
+          enum="SeekAmount.BACKWARD_LARGE"
+          name="Backward Large Amount">
+    <shortcut>
+      <mask keyname="menu" />
+      <mask keyname="shift" />
+      <key keyname="LEFT" />
+    </shortcut>
+  </action>
+
+  <action class="behaviors.multiact.ToggleAnnotationsAction"
+          enum="Direction.FORWARD"
+          name="Toggle Next Annotation">
+    <shortcut>
+      <mask keyname="shift" />
+      <key keyname="RIGHT" />
+    </shortcut>
+  </action>
+
+  <action class="behaviors.multiact.ToggleAnnotationsAction"
+          enum="Direction.BACKWARD"
+          name="Toggle Previous Annotation">
+    <shortcut>
+      <mask keyname="shift" />
+      <key keyname="LEFT" />
+    </shortcut>
+  </action>
+
+  <action class="behaviors.multiact.Last200PlusMoveAction"
+          enum="Direction.BACKWARD"
+          name="Backward Small Amount then Replay Last 200 ms">
+    <shortcut>
+      <mask keyname="alt" />
+      <key keyname="LEFT" />
+    </shortcut>
+  </action>
+
+  <action class="behaviors.multiact.Last200PlusMoveAction"
+          enum="Direction.FORWARD"
+          name="Forward Small Amount then Replay Last 200 ms">
+    <shortcut>
+      <key keyname="alt" />
+      <key keyname="RIGHT" />
+    </shortcut>
+  </action>
+
+  <action class="behaviors.singleact.DeleteSelectedAnnotationAction"
+          name="Delete Selected Annotation on Waveform">
+    <shortcut>
+      <mask keyname="menu" />
+      <key keyname="DELETE" />
+    </shortcut>
+  </action>
+
+  <action class="behaviors.multiact.AnnotateAction"
+          name="Commit Annotation as Intrusion"
+          enum="Mode.INTRUSION"
+          >
+    <shortcut>
+      <mask keyname="menu" />
+      <mask keyname="shift" />
+      <key keyname="ENTER" />
+    </shortcut>
+  </action>
+
+  <!-- Actions without keyboard shortcuts -->
+  <action class="behaviors.singleact.PreferencesAction"
+          name="Preferences..." />
+
+  <action class="behaviors.singleact.AboutAction"
+          name="About"
+          os="Windows,Linux"
+          />
+
+  <action class="behaviors.singleact.CheckUpdatesAction"
+          name="Check For Updates" />
+
+  <action class="behaviors.singleact.VisitTutorialSiteAction"
+          name="Program Homapage" />
+
+  <action class="behaviors.singleact.EditShortcutsAction"
+          name="Edit Keyboard Shortcuts..." />
+
+  <action class="behaviors.singleact.TipsMessageAction"
+          name="View Program Tips..." />
+</actions>
