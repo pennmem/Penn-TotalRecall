@@ -78,7 +78,7 @@
     <property file="ant.properties" />
     
     <echo message="CHECKING JAVA VERSION"/>
-    <fail unless="isJava6" message="JAVA 6 REQUIRED -- SET JAVA_HOME ENV VARIABLE TO A JAVA 6 INSTALLATION"/>
+    <fail unless="isJava6" message="JAVA 6+ REQUIRED -- SET JAVA_HOME ENV VARIABLE TO A JAVA 6 INSTALLATION"/>
     
     <echo message="SETTING TIME STAMP"/>
     <tstamp/>
@@ -127,7 +127,7 @@
   <!-- Compile Java source. -->
   <target name="compile_java" depends="-init" description="compile the Java component of the program">
     <echo message="COMPILING JAVA SOURCE CODE"/>
-    <javac target="1.5" srcdir="${src}" destdir="${classes}">
+    <javac includeantruntime="false" srcdir="${src}" destdir="${classes}">
       <classpath>
         <fileset dir="${lib}">
           <include name="*.jar" />
@@ -441,7 +441,11 @@
   <target name="-javaCheck">
     <echo message="ant.java.version=${ant.java.version}" />
     <condition property="isJava6">
-      <equals arg1="${ant.java.version}" arg2="1.6" />
+      <or>
+        <equals arg1="${ant.java.version}" arg2="1.6" />
+        <equals arg1="${ant.java.version}" arg2="1.7" />
+        <equals arg1="${ant.java.version}" arg2="1.8" />
+      </or>
     </condition>
   </target>
   
